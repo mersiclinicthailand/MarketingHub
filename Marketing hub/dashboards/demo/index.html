@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+Thai:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans Thai',sans-serif;background:#FBFAF6;color:#23271F;padding:36px}
+h1{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600}
+.sub{color:#8A9683;font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:28px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:30px}
+.kpi{background:#fff;border:1px solid rgba(194,163,105,.3);border-radius:14px;padding:20px}
+.kpi .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8A9683}
+.kpi .v{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;margin-top:6px}
+.kpi .d{font-size:12px;color:#4C8558;margin-top:2px}
+.bars{background:#fff;border:1px solid rgba(35,39,31,.08);border-radius:14px;padding:24px}
+.bars h2{font-size:14px;font-weight:600;margin-bottom:18px}
+.row{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:13px}
+.row .n{width:70px;color:#5A5F53}
+.track{flex:1;height:8px;background:#EFEBE0;border-radius:4px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#C2A369,#A8894F);border-radius:4px}
+</style>
+</head>
+<body>
+<h1>Demo Dashboard</h1>
+<div class="sub">ตัวอย่าง — dashboard นี้ถูกฝังผ่าน iframe จากโฟลเดอร์ dashboards/demo</div>
+<div class="kpis">
+  <div class="kpi"><div class="l">ยอดขายเดือนนี้</div><div class="v">฿2.4M</div><div class="d">▲ 12% จากเดือนก่อน</div></div>
+  <div class="kpi"><div class="l">ลูกค้าใหม่</div><div class="v">318</div><div class="d">▲ 8%</div></div>
+  <div class="kpi"><div class="l">Booking</div><div class="v">1,204</div><div class="d">▲ 5%</div></div>
+  <div class="kpi"><div class="l">ROAS เฉลี่ย</div><div class="v">4.2</div><div class="d">▲ 0.3</div></div>
+</div>
+<div class="bars">
+  <h2>ยอดขายตามสาขา (ตัวอย่าง)</h2>
+  <div class="row"><span class="n">สาขา A</span><div class="track"><div class="fill" style="width:88%"></div></div><span>88%</span></div>
+  <div class="row"><span class="n">สาขา B</span><div class="track"><div class="fill" style="width:72%"></div></div><span>72%</span></div>
+  <div class="row"><span class="n">สาขา C</span><div class="track"><div class="fill" style="width:64%"></div></div><span>64%</span></div>
+  <div class="row"><span class="n">สาขา D</span><div class="track"><div class="fill" style="width:51%"></div></div><span>51%</span></div>
+</div>
+</body>
+</html>
