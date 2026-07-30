@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Mersi Marketing Hub</title>
+<style>
+/* ============ BRAND FONTS ============
+   ลำดับการหาไฟล์: ฟอนต์ในเครื่อง → .woff2 ใน assets/fonts → .ttf จาก Font.zip */
+@font-face{font-family:'TT Ramillas';font-weight:300;font-display:swap;
+  src:local('TT Ramillas Trial Light'),url('assets/fonts/TTRamillas-Light.woff2') format('woff2'),url('assets/fonts/TT Ramillas Trial Light.ttf') format('truetype')}
+@font-face{font-family:'TT Ramillas';font-weight:500;font-display:swap;
+  src:local('TT Ramillas Trial Medium'),url('assets/fonts/TTRamillas-Med.woff2') format('woff2'),url('assets/fonts/TT Ramillas Trial Medium.ttf') format('truetype')}
+@font-face{font-family:'TT Ramillas';font-weight:700;font-display:swap;
+  src:local('TT Ramillas Trial Bold'),url('assets/fonts/TTRamillas-Bd.woff2') format('woff2'),url('assets/fonts/TT Ramillas Trial Bold.ttf') format('truetype')}
+@font-face{font-family:'DB Helvethaica X';font-weight:300;font-display:swap;
+  src:local('DB Helvethaica X Li'),url('assets/fonts/DBHelvethaicaX-Li.woff2') format('woff2'),url('assets/fonts/DB Helvethaica X Li.ttf') format('truetype')}
+@font-face{font-family:'DB Helvethaica X';font-weight:400;font-display:swap;
+  src:local('DB Helvethaica X'),url('assets/fonts/DBHelvethaicaX-Reg.woff2') format('woff2'),url('assets/fonts/DB Helvethaica X v3.2.ttf') format('truetype')}
+@font-face{font-family:'DB Helvethaica X';font-weight:500;font-display:swap;
+  src:local('DB Helvethaica X Med'),url('assets/fonts/DBHelvethaicaX-Med.woff2') format('woff2'),url('assets/fonts/DB Helvethaica X Med v3.2.ttf') format('truetype')}
+@font-face{font-family:'DB Helvethaica X';font-weight:700;font-display:swap;
+  src:local('DB Helvethaica X Bd'),url('assets/fonts/DBHelvethaicaX-Bd.woff2') format('woff2'),url('assets/fonts/DB Helvethaica X Bd v3.2.ttf') format('truetype')}
+@font-face{font-family:'DB HelvethaicaMon X';font-weight:500;font-display:swap;
+  src:local('DB HelvethaicaMon X Med'),url('assets/fonts/DBHelvethaicaMonX-Med.woff2') format('woff2'),url('assets/fonts/DB HelvethaicaMon X Med.ttf') format('truetype')}
+
+/* ============ MERSI QUIET LUXURY — LIGHT ============ */
+:root{
+  --cream:#F5F2EA; --cream-2:#EFEBE0; --paper:#FFFEFA;
+  --ink:#23271F; --ink-soft:#5A5F53;
+  --forest:#1B231D; --sage:#8B9478; --sage-deep:#76805F;
+  --gold:#C2A369; --gold-deep:#A8894F; --gold-soft:#E7D9BB;
+  --line:rgba(35,39,31,.10); --line-gold:rgba(194,163,105,.35);
+  --shadow:0 18px 50px -18px rgba(27,35,29,.22);
+  --ok:#4C8558; --warn:#B07A3D; --danger:#A4463C;
+  --r-lg:18px; --r-md:14px; --r-sm:10px;
+  --font-display:'TT Ramillas','DB Helvethaica X',serif;
+  --font-body:'DB Helvethaica X',system-ui,sans-serif;
+  --font-num:'DB HelvethaicaMon X','DB Helvethaica X',sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+/* ============ MIDNIGHT FOREST — DARK ============ */
+[data-theme="dark"]{
+  --cream:#0F1410; --cream-2:#161C17; --paper:rgba(26,33,27,.82);
+  --ink:#ECEAE0; --ink-soft:#A9AE9E;
+  --line:rgba(231,217,187,.10); --line-gold:rgba(194,163,105,.32);
+  --shadow:0 22px 60px -20px rgba(0,0,0,.55);
+  --gold-soft:#5d4f33;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:var(--font-body);background:var(--cream);color:var(--ink);
+  -webkit-font-smoothing:antialiased;font-size:17px;line-height:1.5;
+  transition:background .5s,color .5s;
+}
+::selection{background:var(--gold-soft)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input,select{font-family:inherit;font-size:inherit;color:inherit}
+.hidden{display:none!important}
+.micro{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--gold-deep)}
+
+/* ══════════════════════════════════════════════════════════
+   BRAND MOTION BACKDROP — Mersi Key Visual แบบเคลื่อนไหว
+   sage frame + cream core · โคลเวอร์มุม · ช่อไฮเดรนเยีย · เส้นโค้งทอง · ประกาย
+   ══════════════════════════════════════════════════════════ */
+.bgArt{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bgDefs{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ชั้นสีพื้น — เซจขอบ ครีมกลาง หายใจช้าๆ */
+.bgBase{position:absolute;inset:-12%;
+  background:
+    radial-gradient(56% 44% at 50% 46%, #FCF9EC 0%, rgba(252,249,236,.62) 32%, rgba(252,249,236,0) 68%),
+    linear-gradient(152deg,#B4BE9F 0%,#C5CCB0 24%,#D9DDC6 50%,#C2CAAC 76%,#A9B494 100%);
+  animation:mBreathe 30s ease-in-out infinite}
+[data-theme="dark"] .bgBase{
+  background:
+    radial-gradient(56% 44% at 50% 46%, #1F2B21 0%, rgba(31,43,33,.55) 34%, rgba(31,43,33,0) 70%),
+    linear-gradient(152deg,#0C110D 0%,#131A14 28%,#1B241C 54%,#121912 80%,#0A0E0B 100%)}
+@keyframes mBreathe{0%,100%{transform:scale(1) translate(0,0)}50%{transform:scale(1.045) translate(-.6%,.5%)}}
+
+/* ออร่านุ่มลอยทับ ให้แสงเปลี่ยนตำแหน่งช้าๆ */
+.bgGlow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.34}
+.bgGlow.g1{width:52vmin;height:52vmin;background:#FFFDF0;top:8%;left:26%;animation:mGlow 38s ease-in-out infinite alternate}
+.bgGlow.g2{width:38vmin;height:38vmin;background:var(--gold-soft);bottom:6%;right:22%;animation:mGlow 46s ease-in-out infinite alternate-reverse}
+[data-theme="dark"] .bgGlow{opacity:.16}
+@keyframes mGlow{from{transform:translate(0,0) scale(1)}to{transform:translate(7vmin,-4vmin) scale(1.2)}}
+
+/* ชิ้นงานมุมทั้งสี่ */
+.cor{position:absolute;overflow:visible}
+.cor.tl{width:44vmin;height:44vmin;top:-11vmin;left:-11vmin;animation:mFloatA 46s ease-in-out infinite}
+.cor.br{width:46vmin;height:46vmin;bottom:-12vmin;right:-11vmin;animation:mFloatB 54s ease-in-out infinite}
+.cor.tr{width:52vmin;height:52vmin;top:-13vmin;right:-13vmin;animation:mFloatB 50s ease-in-out infinite}
+.cor.bl{width:52vmin;height:52vmin;bottom:-13vmin;left:-13vmin;animation:mFloatA 58s ease-in-out infinite}
+@keyframes mFloatA{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(1.4vmin,1.8vmin) rotate(2.4deg)}}
+@keyframes mFloatB{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-1.6vmin,-1.4vmin) rotate(-2.6deg)}}
+
+/* โคลเวอร์ — เส้นขอบครีม หมุนช้ามาก */
+.clover{fill:none;stroke:rgba(255,253,246,.9);stroke-width:9;stroke-linejoin:round;
+  transform-origin:200px 200px;animation:mSpin 150s linear infinite}
+.cor.br .clover{animation-direction:reverse;animation-duration:170s}
+[data-theme="dark"] .clover{stroke:rgba(231,217,187,.22)}
+@keyframes mSpin{to{transform:rotate(360deg)}}
+
+/* ช่อไฮเดรนเยีย */
+.hyd{transform-origin:center;animation:mSway 26s ease-in-out infinite}
+.cor.bl .hyd{animation-duration:31s;animation-direction:reverse}
+@keyframes mSway{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.035) rotate(-1.8deg)}}
+.hyd,.fl{opacity:.9}
+[data-theme="dark"] .hyd,[data-theme="dark"] .fl{opacity:.2;filter:saturate(.5) brightness(.85)}
+
+/* ดอกเล็กลอยกระจาย */
+.fl{transform-box:fill-box;transform-origin:center;animation:mDrift 18s ease-in-out infinite}
+.fl.d2{animation-duration:23s;animation-delay:-6s}
+.fl.d3{animation-duration:28s;animation-delay:-12s}
+.fl.d4{animation-duration:21s;animation-delay:-3s}
+@keyframes mDrift{0%,100%{transform:translate(0,0) rotate(0deg)}
+  33%{transform:translate(6px,-9px) rotate(9deg)}
+  66%{transform:translate(-5px,7px) rotate(-7deg)}}
+
+/* เส้นโค้งทอง + แสงวิ่งบนเส้น */
+.arc{fill:none;stroke:rgba(255,253,246,.5);stroke-width:1.6}
+.arc.thin{stroke:rgba(196,170,116,.42);stroke-width:1}
+[data-theme="dark"] .arc{stroke:rgba(231,217,187,.16)}
+[data-theme="dark"] .arc.thin{stroke:rgba(194,163,105,.22)}
+.shine{fill:none;stroke:#FFFEF7;stroke-width:2.6;stroke-linecap:round;
+  stroke-dasharray:70 1400;filter:drop-shadow(0 0 5px rgba(255,251,225,.95));
+  animation:mShine 9s cubic-bezier(.5,0,.5,1) infinite}
+.cor.bl .shine{animation-duration:11s;animation-delay:-4s}
+[data-theme="dark"] .shine{stroke:rgba(231,217,187,.75)}
+@keyframes mShine{0%{stroke-dashoffset:1470;opacity:0}
+  12%{opacity:1} 78%{opacity:1} 100%{stroke-dashoffset:0;opacity:0}}
+
+/* ประกายดาว 4 แฉก */
+.spark{position:absolute;background:linear-gradient(#FFFEF8,#F3E8CA);
+  clip-path:polygon(50% 0,56.5% 43.5%,100% 50%,56.5% 56.5%,50% 100%,43.5% 56.5%,0 50%,43.5% 43.5%);
+  opacity:0;animation:mTwinkle 7s ease-in-out infinite}
+[data-theme="dark"] .spark{background:linear-gradient(#E7D9BB,#C2A369)}
+@keyframes mTwinkle{0%,100%{opacity:0;transform:scale(.5) rotate(0deg)}
+  40%{opacity:.95;transform:scale(1) rotate(22deg)}
+  60%{opacity:.5;transform:scale(.9) rotate(34deg)}}
+
+@media(max-width:760px){
+  .cor.tl,.cor.br{width:56vmin;height:56vmin}
+  .cor.tr,.cor.bl{width:64vmin;height:64vmin}
+}
+@media(prefers-reduced-motion:reduce){
+  .bgBase,.bgGlow,.cor,.clover,.hyd,.fl,.shine,.spark{animation:none!important}
+  .spark{opacity:.6}
+}
+.grain{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.045;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")}
+[data-theme="dark"] .grain{mix-blend-mode:screen;opacity:.06}
+
+/* ============ BRAND LOGO ============ */
+.logoCircle{border-radius:50%;background:var(--sage);color:#FDFDFB;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;user-select:none}
+.logoCircle .lm{font-family:var(--font-display);font-weight:500;line-height:1}
+.logoCircle .lc{letter-spacing:.42em;text-indent:.42em;font-weight:400;opacity:.92}
+.logoXL{width:112px;height:112px}.logoXL .lm{font-size:42px}.logoXL .lc{font-size:10px;margin-top:6px}
+.logoSM{width:46px;height:46px}.logoSM .lm{font-size:19px}.logoSM .lc{display:none}
+img.logoImg{border-radius:50%;object-fit:contain;background:#fff}
+
+/* ============ LOGIN ============ */
+/* โปร่งใส — ให้ Motion Backdrop (KV แบรนด์) แสดงเต็มจอหน้า login */
+#loginView{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;z-index:50;
+  background:transparent}
+.loginCard{width:100%;max-width:410px;background:var(--paper);border:1px solid var(--line-gold);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:44px 42px 32px;text-align:center;animation:rise .7s var(--ease) both;backdrop-filter:blur(18px);position:relative;z-index:2}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.loginCard .logoCircle{margin:0 auto 20px}
+.loginCard .hubLabel{font-family:var(--font-display);font-size:15px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:var(--sage-deep);margin-bottom:6px}
+.loginCard .sub{color:var(--ink-soft);font-size:15px;margin-bottom:26px}
+.field{text-align:left;margin-bottom:16px}
+.field label{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;font-weight:500}
+.field input,.field select{width:100%;padding:12px 15px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--cream);font-size:17px;color:var(--ink);outline:none;transition:border-color .25s,box-shadow .25s}
+.field input:focus,.field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,163,105,.15)}
+.btnGold{width:100%;margin-top:8px;padding:13px;border-radius:var(--r-sm);background:linear-gradient(135deg,#CBAD74,var(--gold-deep));color:#fff;font-size:15.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;transition:transform .2s var(--ease),box-shadow .25s;box-shadow:0 10px 24px -10px rgba(168,137,79,.55)}
+.btnGold:hover{transform:translateY(-1px)}
+.loginErr{color:var(--danger);font-size:14.5px;margin-top:12px;min-height:20px}
+.loginFoot{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft)}
+
+/* ============ APP SHELL ============ */
+#appView{display:flex;height:100vh;overflow:hidden;position:relative;z-index:2}
+.sidebar{width:276px;flex-shrink:0;background:var(--forest);color:#E8E6DD;display:flex;flex-direction:column;position:relative;z-index:30;transition:transform .35s var(--ease)}
+.sidebar::after{content:"";position:absolute;top:0;right:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,var(--line-gold),transparent)}
+.sbBrand{padding:26px 24px 20px;display:flex;align-items:center;gap:13px}
+.sbBrand .n{font-family:var(--font-display);font-size:23px;font-weight:500;color:#F3F1E8;line-height:1.1}
+.sbBrand .t{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sage);margin-top:3px}
+.sbNav{flex:1;overflow-y:auto;padding:4px 14px 16px}
+.sbNav::-webkit-scrollbar{width:4px}.sbNav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.sbSection{margin-top:16px;padding:0 12px 8px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--sage)}
+.navItem{display:flex;align-items:center;gap:11px;width:100%;padding:10px 12px;border-radius:var(--r-sm);color:#CFCEC2;font-size:16px;text-align:left;transition:background .2s,color .2s;border:1px solid transparent}
+.navItem .ic{width:20px;text-align:center;color:var(--sage);font-size:13px}
+.navItem:hover{background:rgba(255,255,255,.05);color:#fff}
+.navItem.active{background:rgba(194,163,105,.13);border-color:rgba(194,163,105,.28);color:#F3EAD6}
+.navItem.active .ic{color:var(--gold)}
+.navItem .cnt{margin-left:auto;font-size:13px;color:var(--sage);font-family:var(--font-num)}
+.sbUser{padding:14px 18px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:11px}
+.avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:17px}
+.sbUser .un{font-size:15.5px;font-weight:500;color:#F0EEE4;line-height:1.2}
+.sbUser .ur{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sage)}
+.logoutBtn{margin-left:auto;color:var(--sage);font-size:17px;padding:8px;border-radius:8px;transition:.2s}
+.logoutBtn:hover{color:#E8B4A6;background:rgba(255,255,255,.06)}
+
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{display:flex;align-items:center;gap:16px;padding:14px 30px;background:color-mix(in srgb,var(--cream) 82%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);position:relative;z-index:20}
+.burger{display:none;font-size:20px;padding:6px 10px;border-radius:8px}
+.greet .g1{font-family:var(--font-display);font-size:22px;font-weight:500;line-height:1.2}
+.greet .g2{font-size:14px;color:var(--ink-soft)}
+.searchBtn{margin-left:auto;display:flex;align-items:center;gap:10px;width:min(320px,32vw);padding:10px 14px;border-radius:99px;border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);font-size:15px;transition:border-color .25s}
+.searchBtn:hover{border-color:var(--gold)}
+.searchBtn .kbd{margin-left:auto;font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:var(--cream)}
+.iconBtn{font-size:17px;padding:9px 12px;border-radius:99px;border:1px solid var(--line);background:var(--paper);transition:.25s}
+.iconBtn:hover{border-color:var(--gold);color:var(--gold-deep)}
+.clock{text-align:right;line-height:1.25}
+.clock .c1{font-family:var(--font-num);font-size:20px;font-weight:500}
+.clock .c2{font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
+
+.content{flex:1;overflow-y:auto;padding:28px 36px 60px;scroll-behavior:smooth}
+.content::-webkit-scrollbar{width:8px}.content::-webkit-scrollbar-thumb{background:rgba(127,127,110,.25);border-radius:4px}
+
+/* ---- Announcement ---- */
+.announce{display:flex;align-items:center;gap:12px;padding:13px 18px;border-radius:var(--r-md);margin-bottom:22px;background:var(--paper);border:1px solid var(--line-gold);position:relative;overflow:hidden;animation:rise .5s var(--ease) both}
+.announce::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--gold),var(--gold-deep))}
+.announce.warn::before{background:var(--warn)}
+.announce .ax{margin-left:auto;color:var(--ink-soft);padding:4px 8px;border-radius:6px}
+.announce .ax:hover{color:var(--danger)}
+
+/* ---- Hero + stats ---- */
+.hero{margin-bottom:26px}
+.hero h2{font-family:var(--font-display);font-size:42px;font-weight:500;line-height:1.12;margin-top:8px}
+.hero h2 em{font-style:italic;color:var(--gold-deep)}
+.hero p{color:var(--ink-soft);margin-top:8px;max-width:600px;font-size:16px}
+.statRow{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+.statChip{display:flex;align-items:baseline;gap:9px;padding:12px 20px;border-radius:var(--r-md);background:var(--paper);border:1px solid var(--line);backdrop-filter:blur(10px)}
+.statChip .v{font-family:var(--font-num);font-size:26px;font-weight:500;color:var(--gold-deep)}
+.statChip .l{font-size:13px;color:var(--ink-soft)}
+.modeChip{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:var(--r-md);background:var(--paper);border:1px solid var(--line);font-size:13.5px;color:var(--ink-soft)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+.dot.off{background:#9aa08e;animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,133,88,.45)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+.sectionHead{display:flex;align-items:baseline;gap:14px;margin:32px 0 16px}
+.sectionHead h3{font-family:var(--font-display);font-size:25px;font-weight:500}
+.sectionHead .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--line-gold),transparent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+
+/* ---- Card ---- */
+.card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:22px 22px 16px;text-align:left;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;overflow:hidden;display:flex;flex-direction:column;gap:10px;cursor:pointer;backdrop-filter:blur(10px);animation:cardIn .55s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card::before{content:"";position:absolute;top:0;left:22px;right:22px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .3s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--line-gold)}
+.card:hover::before{opacity:.8}
+.cardTop{display:flex;align-items:flex-start;gap:14px}
+.medal{width:46px;height:46px;border-radius:50%;flex-shrink:0;border:1px solid var(--line-gold);background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold-deep);font-family:var(--font-display);transition:transform .3s var(--ease)}
+.card:hover .medal{transform:scale(1.08) rotate(-6deg)}
+.cardTop .tt{font-size:19px;font-weight:500;line-height:1.25;padding-right:26px}
+.cardTop .cat{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-top:3px;display:flex;align-items:center;gap:7px}
+.card .desc{font-size:15px;color:var(--ink-soft);line-height:1.55;flex:1}
+.cardFoot{display:flex;align-items:center;gap:8px;padding-top:11px;border-top:1px solid var(--line)}
+.chip{font-size:12.5px;padding:2px 10px;border-radius:99px;background:var(--cream-2);color:var(--ink-soft)}
+.openHint{margin-left:auto;font-size:13.5px;color:var(--gold-deep);font-weight:500;white-space:nowrap}
+.starBtn{position:absolute;top:12px;right:12px;font-size:17px;color:#C9C5B6;padding:7px;border-radius:8px;transition:.2s;z-index:2}
+.starBtn:hover{transform:scale(1.15)}
+.starBtn.faved{color:var(--gold)}
+.emptyNote{border:1px dashed var(--line-gold);border-radius:var(--r-md);padding:26px;text-align:center;color:var(--ink-soft);font-size:15px}
+
+/* ---- Viewer ---- */
+#viewer{display:flex;flex-direction:column;flex:1;min-height:0}
+.vBar{display:flex;align-items:center;gap:12px;padding:11px 22px;background:var(--paper);border-bottom:1px solid var(--line);flex-wrap:wrap;backdrop-filter:blur(14px)}
+.vBtn{display:flex;align-items:center;gap:7px;font-size:14.5px;font-weight:500;padding:8px 14px;border-radius:var(--r-sm);border:1px solid var(--line);color:var(--ink-soft);transition:.2s;background:var(--cream);white-space:nowrap}
+.vBtn:hover{border-color:var(--gold);color:var(--gold-deep)}
+.vTitle{font-family:var(--font-display);font-size:22px;font-weight:500;margin-left:6px;line-height:1.15}
+.vMeta{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:8px}
+.vActions{margin-left:auto;display:flex;gap:8px}
+.vFrameWrap{flex:1;position:relative;background:var(--cream-2)}
+#vFrame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;opacity:0;transition:opacity .5s}
+#vFrame.on{opacity:1}
+.vLoad{position:absolute;inset:0;display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;background:var(--cream-2);transition:opacity .4s;color:var(--ink-soft);font-size:14px;letter-spacing:.12em}
+.spinner{width:38px;height:38px;border-radius:50%;border:2px solid var(--gold-soft);border-top-color:var(--gold-deep);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- Admin ---- */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:24px;margin-bottom:20px;backdrop-filter:blur(10px);animation:cardIn .5s var(--ease) both}
+.panel h4{font-family:var(--font-display);font-size:21px;font-weight:500;margin-bottom:4px}
+.panel .ps{font-size:13.5px;color:var(--ink-soft);margin-bottom:16px}
+.formRow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.formRow .field{flex:1;min-width:150px;margin-bottom:0}
+.btnMini{padding:10px 18px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--cream);font-size:14.5px;font-weight:500;transition:.2s;white-space:nowrap}
+.btnMini:hover{border-color:var(--gold);color:var(--gold-deep)}
+.btnMini.primary{background:linear-gradient(135deg,#CBAD74,var(--gold-deep));color:#fff;border-color:transparent}
+.btnMini.danger:hover{border-color:var(--danger);color:var(--danger)}
+table.tbl{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+.tbl th{text-align:left;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);padding:9px 10px;border-bottom:1px solid var(--line-gold);font-weight:500}
+.tbl td{padding:10px;border-bottom:1px solid var(--line)}
+.roleChip{font-size:12px;padding:2px 10px;border-radius:99px;background:var(--cream-2);letter-spacing:.06em}
+.roleChip.admin{background:var(--gold-soft);color:var(--ink)}
+.stChip{font-size:12.5px;font-weight:600}
+.stChip.on{color:var(--ok)}.stChip.off{color:var(--danger)}
+.barRow{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:14px}
+.barRow .n{width:180px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.barTrack{flex:1;height:8px;background:var(--cream-2);border-radius:4px;overflow:hidden}
+.barFill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-deep));border-radius:4px;transition:width .8s var(--ease)}
+
+/* ---- Command palette ---- */
+#palWrap{position:fixed;inset:0;background:rgba(15,20,16,.45);backdrop-filter:blur(6px);z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:12vh 18px 0;opacity:0;pointer-events:none;transition:opacity .25s}
+#palWrap.open{opacity:1;pointer-events:auto}
+.pal{width:min(560px,100%);background:var(--paper);border:1px solid var(--line-gold);border-radius:var(--r-lg);box-shadow:var(--shadow);overflow:hidden;transform:translateY(-8px);transition:transform .25s var(--ease)}
+#palWrap.open .pal{transform:none}
+#palInput{width:100%;padding:17px 20px;border:0;outline:none;background:transparent;font-size:18px;color:var(--ink);border-bottom:1px solid var(--line)}
+#palList{max-height:46vh;overflow-y:auto;padding:8px}
+.palItem{display:flex;align-items:center;gap:13px;width:100%;padding:11px 13px;border-radius:var(--r-sm);text-align:left;transition:background .15s}
+.palItem .medal{width:36px;height:36px;font-size:14px}
+.palItem .t{font-size:16px;font-weight:500}
+.palItem .c{font-size:12px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase}
+.palItem.sel,.palItem:hover{background:var(--cream-2)}
+.palItem .go{margin-left:auto;font-size:12px;color:var(--gold-deep)}
+.palFoot{padding:9px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);display:flex;gap:16px}
+
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest);color:#F0EEE4;padding:12px 22px;border-radius:99px;font-size:15px;box-shadow:var(--shadow);opacity:0;transition:all .4s var(--ease);z-index:99;border:1px solid rgba(194,163,105,.4);pointer-events:none;max-width:88vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.scrim{display:none}
+@media(max-width:920px){
+  .sidebar{position:fixed;top:0;bottom:0;left:0;transform:translateX(-100%)}
+  .sidebar.open{transform:none;box-shadow:var(--shadow)}
+  .scrim{display:block;position:fixed;inset:0;background:rgba(15,20,16,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:25}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .burger{display:block}
+  .clock{display:none}
+  .topbar{padding:12px 16px;flex-wrap:wrap}
+  .content{padding:20px 16px 50px}
+  .hero h2{font-size:31px}
+  .searchBtn{width:auto;flex:1}
+  .searchBtn .kbd{display:none}
+  .vActions{margin-left:0;width:100%;justify-content:flex-end}
+  .barRow .n{width:110px}
+}
+
+/* ══════════════════════════════════════════════════════════
+   HI-TECH LAYER v3 — glass · lattice · glow · mono · motion
+   (คงโทนแบรนด์ ครีม/ทอง/เซจ — เพิ่มความเนี้ยบแบบ command-center)
+   ══════════════════════════════════════════════════════════ */
+:root{
+  --font-num:'DB HelvethaicaMon X',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+  --glow-gold:rgba(194,163,105,.55);
+  --glass:color-mix(in srgb,var(--paper) 72%,transparent);
+  --glass-strong:color-mix(in srgb,var(--paper) 86%,transparent);
+  --hair:color-mix(in srgb,var(--gold) 22%,transparent);
+}
+[data-theme="dark"]{ --glass:color-mix(in srgb,var(--paper) 60%,transparent); }
+
+/* ---- faint lattice grid over the whole app ---- */
+.mesh{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.26;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(120% 90% at 50% -10%,#000 18%,transparent 66%);
+          mask-image:radial-gradient(120% 90% at 50% -10%,#000 18%,transparent 66%)}
+[data-theme="dark"] .mesh{opacity:.4}
+
+/* ---- glassy surfaces (translucent fill; blur reserved for low-count chrome) ---- */
+.statChip,.modeChip,.card,.panel,.announce{background:var(--glass)}
+.searchBtn,.iconBtn,.vBar,.loginCard,.pal,.clock{
+  background:var(--glass);backdrop-filter:blur(16px) saturate(1.12);-webkit-backdrop-filter:blur(16px) saturate(1.12)}
+.topbar{background:color-mix(in srgb,var(--cream) 72%,transparent);backdrop-filter:blur(16px) saturate(1.08);-webkit-backdrop-filter:blur(16px) saturate(1.08)}
+
+/* ---- mono/technical type for numbers & labels ---- */
+.statChip .v,.clock .c1,.card .cnt,.navItem .cnt,.barRow span:last-child,.roleChip,.stChip{
+  font-family:var(--font-num);font-feature-settings:"tnum" 1;letter-spacing:.01em}
+.micro,.vMeta,.field label,.tbl th,.cardTop .cat{font-feature-settings:"tnum" 1}
+.statChip .l{font-family:var(--font-num);font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.8}
+
+/* ---- data-panel cards: hairline ring, corner tick, glow ---- */
+.card{border-color:var(--hair)}
+.card::after{content:"";position:absolute;top:11px;left:11px;width:13px;height:13px;pointer-events:none;
+  border-top:1.5px solid var(--line-gold);border-left:1.5px solid var(--line-gold);border-top-left-radius:5px;
+  opacity:.65;transition:opacity .3s,border-color .3s,filter .3s}
+.card:hover{box-shadow:var(--shadow),0 0 0 1px var(--line-gold),0 0 32px -14px var(--glow-gold)}
+.card:hover::after{opacity:1;border-color:var(--gold);filter:drop-shadow(0 0 5px var(--glow-gold))}
+.card:active{transform:translateY(-2px) scale(.995)}
+.medal{background:linear-gradient(150deg,var(--cream),color-mix(in srgb,var(--gold-soft) 60%,var(--cream)));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+
+/* ---- stat chips: technical readout ---- */
+.statChip{position:relative;padding-top:16px;overflow:hidden}
+.statChip::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.55}
+.statChip .v{font-size:27px;letter-spacing:-.01em}
+.modeChip{position:relative;padding-top:16px}
+
+/* ---- topbar clock: framed HUD ---- */
+.clock{padding:6px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--glass);position:relative}
+.clock .c2{font-family:var(--font-num);letter-spacing:.1em;text-transform:uppercase;font-size:10.5px;opacity:.75}
+.searchBtn .kbd{font-family:var(--font-num)}
+
+/* ---- sidebar: subtle lattice + active glow ---- */
+.sidebar{background:
+  linear-gradient(180deg,color-mix(in srgb,var(--forest) 92%,#000) 0%,var(--forest) 40%),
+  var(--forest)}
+.sidebar .sbNav{background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px);background-size:100% 42px}
+.navItem{position:relative}
+.navItem.active{box-shadow:inset 0 0 22px -8px var(--glow-gold)}
+.navItem.active::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;border-radius:2px;
+  background:linear-gradient(180deg,var(--gold),var(--gold-deep));box-shadow:0 0 10px var(--glow-gold)}
+.sbBrand .n{letter-spacing:.01em}
+.sbSection{font-family:var(--font-num)}
+
+/* ---- login: HUD frame ---- */
+.loginCard::before{content:"";position:absolute;inset:0;border-radius:var(--r-lg);pointer-events:none;
+  background:linear-gradient(135deg,var(--line-gold),transparent 40%,transparent 60%,var(--line-gold));
+  -webkit-mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+  -webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.7}
+.hubLabel{font-family:var(--font-num)}
+
+/* ---- viewer: technical toolbar ---- */
+.vBar{border-bottom-color:var(--line-gold)}
+.vMeta{font-family:var(--font-num)}
+.vFrameWrap{background:
+  radial-gradient(60% 60% at 50% 40%,color-mix(in srgb,var(--sage) 8%,transparent),transparent 70%),
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/46px 46px,
+  linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/46px 46px,var(--cream-2)}
+
+/* ---- section header: technical marker ---- */
+.sectionHead h3{letter-spacing:.005em}
+.sectionHead::before{content:"";width:7px;height:7px;border:1.5px solid var(--gold-deep);border-radius:2px;
+  transform:rotate(45deg);flex-shrink:0;opacity:.8}
+
+/* ---- command palette mono ---- */
+.palItem .c,.palFoot{font-family:var(--font-num)}
+
+/* ---- smooth view transition ---- */
+#homeView:not(.hidden),#viewer:not(.hidden){animation:viewIn .45s var(--ease) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ══════════════ RESPONSIVE — Desktop / Tablet / Mobile ══════════════ */
+/* — Laptop/narrow desktop — */
+@media(max-width:1240px){
+  .sidebar{width:246px}
+  .content{padding:26px 30px 56px}
+  .hero h2{font-size:37px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+}
+/* — Tablet — */
+@media(max-width:920px){
+  .greet .g1{font-size:19px}
+  .searchBtn{order:5;flex-basis:100%;width:100%;margin-left:0}
+  .searchBtn .kbd{display:inline-block}
+  .statChip{flex:1;min-width:calc(50% - 7px)}
+  .modeChip{flex-basis:100%}
+  .vBar{padding:10px 16px}
+  .vTitle{font-size:19px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+}
+/* — Mobile — */
+@media(max-width:600px){
+  body{font-size:16px}
+  .topbar{padding:10px 14px;gap:10px}
+  .greet .g1{font-size:17px}.greet .g2{font-size:12.5px}
+  .clock{display:none}
+  .iconBtn{padding:8px 11px}
+  .content{padding:16px 14px 46px}
+  .hero h2{font-size:27px;line-height:1.15}
+  .hero p{font-size:14.5px}
+  .statRow{gap:10px}
+  .statChip{min-width:calc(50% - 5px);padding:12px 14px 14px}
+  .statChip .v{font-size:22px}
+  .grid{grid-template-columns:1fr;gap:14px}
+  .sectionHead{margin:24px 0 12px}
+  .sectionHead h3{font-size:21px}
+  .card{padding:18px 18px 14px}
+  .cardTop .tt{font-size:18px}
+  .loginCard{padding:34px 24px 26px}
+  .vBar{gap:8px}
+  .vBtn{padding:8px 11px;font-size:13.5px}
+  .vActions{gap:6px}
+  .pal{width:100%}
+  #palWrap{padding:8vh 12px 0}
+  .announce{font-size:14.5px;padding:12px 14px}
+  .panel{padding:18px 16px}
+  .formRow .field{min-width:100%}
+  .tbl{font-size:14px}
+  .tbl td,.tbl th{padding:8px 6px}
+}
+/* — very small — */
+@media(max-width:380px){
+  .statChip{min-width:100%}
+  .hero h2{font-size:24px}
+}
+
+/* ══════════════════════════════════════════════════════════
+   IT CONSOLE v4 — tabs · modal form · data tables
+   ══════════════════════════════════════════════════════════ */
+.tabBar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 20px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.tabBtn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:99px;border:1px solid var(--line);
+  background:var(--glass);font-size:14.5px;font-weight:500;color:var(--ink-soft);transition:.2s var(--ease);white-space:nowrap}
+.tabBtn:hover{border-color:var(--gold);color:var(--gold-deep);transform:translateY(-1px)}
+.tabBtn.on{background:linear-gradient(135deg,#CBAD74,var(--gold-deep));color:#fff;border-color:transparent;
+  box-shadow:0 8px 20px -10px rgba(168,137,79,.6)}
+
+.pHead{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.pHead h4{margin-bottom:2px}
+.pHead .ps{margin-bottom:0;max-width:640px}
+.pAct{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.miniSearch{padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:var(--cream);
+  font-size:14.5px;min-width:170px;outline:none;transition:.2s}
+.miniSearch:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,163,105,.15)}
+
+.tblWrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl tr:hover td{background:color-mix(in srgb,var(--gold-soft) 18%,transparent)}
+.tbl td.actCell{text-align:right;white-space:nowrap}
+.tbl td.actCell .btnMini{padding:6px 11px;font-size:13.5px;margin-left:5px}
+.roleChip.it{background:color-mix(in srgb,var(--sage) 42%,var(--cream-2));color:var(--ink)}
+.tagMini{font-size:11.5px;padding:1px 8px;border-radius:99px;background:var(--cream-2);color:var(--ink-soft);margin-right:4px;white-space:nowrap}
+.ordBtn{padding:3px 8px;border-radius:6px;border:1px solid var(--line);color:var(--ink-soft);font-size:13px;line-height:1.4}
+.ordBtn:hover{border-color:var(--gold);color:var(--gold-deep)}
+.badgeOn{font-family:var(--font-num);font-size:12px;padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.badgeOff{font-family:var(--font-num);font-size:12px;padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.hintBox{border:1px dashed var(--line-gold);border-radius:var(--r-md);padding:14px 16px;font-size:14px;color:var(--ink-soft);line-height:1.65;margin-top:12px}
+.hintBox b{color:var(--ink)}
+.hintBox code{font-family:var(--font-num);font-size:13px;background:var(--cream-2);padding:1px 6px;border-radius:5px}
+
+/* ---- modal ---- */
+#mdWrap{position:fixed;inset:0;background:rgba(15,20,16,.5);backdrop-filter:blur(7px);z-index:90;
+  display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px 4vh;overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity .25s}
+#mdWrap.open{opacity:1;pointer-events:auto}
+.md{width:min(620px,100%);background:var(--paper);border:1px solid var(--line-gold);border-radius:var(--r-lg);
+  box-shadow:var(--shadow);overflow:hidden;transform:translateY(-10px) scale(.985);transition:transform .28s var(--ease);
+  backdrop-filter:blur(18px);margin:auto}
+#mdWrap.open .md{transform:none}
+.mdHead{display:flex;align-items:flex-start;gap:12px;padding:20px 24px 15px;border-bottom:1px solid var(--line)}
+.mdTitle{font-family:var(--font-display);font-size:22px;font-weight:500;line-height:1.2}
+.mdSub{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
+.mdX{margin-left:auto;font-size:18px;color:var(--ink-soft);padding:6px 10px;border-radius:8px;transition:.2s}
+.mdX:hover{color:var(--danger);background:var(--cream-2)}
+.mdBody{padding:20px 24px 6px;max-height:62vh;overflow-y:auto}
+.mdBody .field{margin-bottom:15px}
+.mdBody textarea{width:100%;padding:12px 15px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--cream);
+  font-family:inherit;font-size:16.5px;color:var(--ink);outline:none;resize:vertical;min-height:76px;transition:.2s}
+.mdBody textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,163,105,.15)}
+.mdRow{display:flex;gap:12px;flex-wrap:wrap}
+.mdRow .field{flex:1;min-width:150px}
+.fHint{font-size:12.5px;color:var(--ink-soft);margin-top:5px;line-height:1.45}
+.mdChk{display:flex;align-items:center;gap:9px;font-size:15px;padding:8px 12px;border:1px solid var(--line);
+  border-radius:var(--r-sm);background:var(--cream);cursor:pointer;transition:.2s;user-select:none}
+.mdChk:hover{border-color:var(--gold)}
+.mdChk input{width:17px;height:17px;accent-color:var(--gold-deep);cursor:pointer}
+.chkGrid{display:flex;gap:9px;flex-wrap:wrap}
+.mdFoot{display:flex;gap:10px;justify-content:flex-end;padding:15px 24px 20px;border-top:1px solid var(--line);
+  background:color-mix(in srgb,var(--cream-2) 55%,transparent)}
+.mdErr{color:var(--danger);font-size:14px;margin-right:auto;align-self:center;text-align:left}
+@media(max-width:1340px){
+  #admBody .tbl{font-size:14px}
+  #admBody .tbl td,#admBody .tbl th{padding:8px 7px}
+  #admBody .tbl td.actCell .btnMini{padding:5px 9px;font-size:13px;margin-left:4px}
+}
+/* — มือถือ: แปลงตารางเป็นการ์ดอ่านง่าย — */
+@media(max-width:620px){
+  #admBody .tbl,#admBody .tbl tbody,#admBody .tbl tr,#admBody .tbl td{display:block;width:100%}
+  #admBody .tbl tr:has(th){display:none}
+  #admBody .tbl tr{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;margin-bottom:10px;background:var(--cream)}
+  #admBody .tbl td{border:0;padding:3px 0}
+  #admBody .tbl tr:hover td{background:transparent}
+  #admBody .tbl td.actCell{display:flex;flex-wrap:wrap;gap:6px;text-align:left;
+    margin-top:9px;padding-top:10px;border-top:1px solid var(--line)}
+  #admBody .tbl td.actCell .btnMini{margin-left:0;flex:1 1 auto;min-width:84px;text-align:center}
+  #admBody .tblWrap{overflow-x:visible}
+}
+@media(max-width:600px){
+  .mdBody{max-height:54vh;padding:16px 16px 4px}
+  .mdHead,.mdFoot{padding-left:16px;padding-right:16px}
+  .tabBtn{padding:8px 13px;font-size:13.5px}
+  .pAct{width:100%;margin-left:0}
+  .miniSearch{flex:1;min-width:0}
+}
+</style>
+</head>
+<body>
+<!-- ══════════ MOTION BACKDROP (Mersi Key Visual) ══════════ -->
+<div class="bgArt" aria-hidden="true">
+  <div class="bgBase"></div>
+  <div class="bgGlow g1"></div><div class="bgGlow g2"></div>
+
+  <svg class="bgDefs"><defs>
+    <!-- กลีบโคลเวอร์ 1 กลีบ (ชี้ขึ้น) -->
+    <path id="mPetal" d="M0,6 C-52,-16 -44,-104 0,-104 C44,-104 52,-16 0,6 Z"/>
+    <!-- โคลเวอร์ 4 กลีบ + ประกายกลาง -->
+    <g id="mClover">
+      <use href="#mPetal" x="0" y="0"/>
+      <use href="#mPetal" transform="rotate(90)"/>
+      <use href="#mPetal" transform="rotate(180)"/>
+      <use href="#mPetal" transform="rotate(270)"/>
+    </g>
+    <!-- ดอกไฮเดรนเยียเล็ก 4 กลีบ (ใส่สีเป็น attribute เพื่อความชัวร์ข้ามเบราว์เซอร์) -->
+    <g id="mFlower" fill="#FFFDF4" stroke="rgba(176,160,116,.55)" stroke-width="1.1">
+      <circle cx="0" cy="-8.4" r="7.6"/><circle cx="8.4" cy="0" r="7.6"/>
+      <circle cx="0" cy="8.4" r="7.6"/><circle cx="-8.4" cy="0" r="7.6"/>
+      <circle cx="0" cy="0" r="2.7" fill="#EDE0BE" stroke="none"/>
+    </g>
+    <!-- ช่อไฮเดรนเยีย -->
+    <g id="mCluster">
+      <use href="#mFlower" transform="translate(0,-46) scale(1.05)"/>
+      <use href="#mFlower" transform="translate(-38,-30) rotate(18)"/>
+      <use href="#mFlower" transform="translate(38,-28) rotate(-14) scale(1.1)"/>
+      <use href="#mFlower" transform="translate(-58,4) rotate(30) scale(.95)"/>
+      <use href="#mFlower" transform="translate(0,-8) scale(1.18)"/>
+      <use href="#mFlower" transform="translate(58,2) rotate(-24)"/>
+      <use href="#mFlower" transform="translate(-40,36) rotate(12) scale(1.05)"/>
+      <use href="#mFlower" transform="translate(4,38) rotate(-8) scale(1.1)"/>
+      <use href="#mFlower" transform="translate(44,36) rotate(22) scale(.92)"/>
+      <use href="#mFlower" transform="translate(-20,-58) rotate(-20) scale(.86)"/>
+      <use href="#mFlower" transform="translate(24,-58) rotate(16) scale(.9)"/>
+      <use href="#mFlower" transform="translate(-70,-52) rotate(8) scale(.72)"/>
+      <use href="#mFlower" transform="translate(74,-52) rotate(-18) scale(.76)"/>
+      <use href="#mFlower" transform="translate(-14,72) rotate(26) scale(.8)"/>
+      <use href="#mFlower" transform="translate(34,70) rotate(-12) scale(.7)"/>
+    </g>
+  </defs></svg>
+
+  <!-- มุมซ้ายบน · โคลเวอร์ -->
+  <svg class="cor tl" viewBox="0 0 400 400">
+    <g class="clover" transform="translate(200 200) rotate(14)"><use href="#mClover"/></g>
+  </svg>
+
+  <!-- มุมขวาล่าง · โคลเวอร์ + ประกายกลางดอก -->
+  <svg class="cor br" viewBox="0 0 400 400">
+    <g class="clover" transform="translate(200 200) rotate(-10)"><use href="#mClover"/></g>
+  </svg>
+
+  <!-- มุมขวาบน · เส้นโค้ง + ช่อไฮเดรนเยีย -->
+  <svg class="cor tr" viewBox="0 0 400 400">
+    <g transform="translate(400 0)">
+      <path class="arc" d="M-392,196 A392,392 0 0 0 -196,0"/>
+      <path class="arc thin" d="M-374,186 A374,374 0 0 0 -186,0"/>
+      <path class="arc thin" d="M-356,178 A356,356 0 0 0 -178,0"/>
+      <path class="arc" d="M-338,168 A338,338 0 0 0 -168,0"/>
+      <path class="arc thin" d="M-318,158 A318,318 0 0 0 -158,0"/>
+      <path class="shine" d="M-374,186 A374,374 0 0 0 -186,0"/>
+    </g>
+    <g class="hyd" transform="translate(300 92) scale(1.15)"><use href="#mCluster"/></g>
+    <g class="fl"    transform="translate(170 150)"><use href="#mFlower" transform="scale(.95)"/></g>
+    <g class="fl d2" transform="translate(214 108)"><use href="#mFlower" transform="scale(.75)"/></g>
+    <g class="fl d3" transform="translate(140 96)"><use href="#mFlower" transform="scale(.62)"/></g>
+    <g class="fl d4" transform="translate(196 186)"><use href="#mFlower" transform="scale(.55)"/></g>
+  </svg>
+
+  <!-- มุมซ้ายล่าง · เส้นโค้ง + ช่อไฮเดรนเยีย -->
+  <svg class="cor bl" viewBox="0 0 400 400">
+    <g transform="translate(0 400)">
+      <path class="arc" d="M392,-196 A392,392 0 0 0 196,0"/>
+      <path class="arc thin" d="M374,-186 A374,374 0 0 0 186,0"/>
+      <path class="arc thin" d="M356,-178 A356,356 0 0 0 178,0"/>
+      <path class="arc" d="M338,-168 A338,338 0 0 0 168,0"/>
+      <path class="arc thin" d="M318,-158 A318,318 0 0 0 158,0"/>
+      <path class="shine" d="M374,-186 A374,374 0 0 0 186,0"/>
+    </g>
+    <g class="hyd" transform="translate(96 306) scale(1.2)"><use href="#mCluster"/></g>
+    <g class="fl d2" transform="translate(222 258)"><use href="#mFlower" transform="scale(.9)"/></g>
+    <g class="fl"    transform="translate(186 300)"><use href="#mFlower" transform="scale(.7)"/></g>
+    <g class="fl d4" transform="translate(252 214)"><use href="#mFlower" transform="scale(.58)"/></g>
+    <g class="fl d3" transform="translate(258 300)"><use href="#mFlower" transform="scale(.5)"/></g>
+  </svg>
+
+  <!-- ประกายดาว -->
+  <div class="spark" style="width:22px;height:22px;top:11%;right:31%;animation-delay:-.4s"></div>
+  <div class="spark" style="width:13px;height:13px;top:23%;right:23%;animation-delay:-2.6s"></div>
+  <div class="spark" style="width:9px;height:9px;top:17%;right:38%;animation-delay:-4.9s"></div>
+  <div class="spark" style="width:16px;height:16px;bottom:15%;left:30%;animation-delay:-1.7s"></div>
+  <div class="spark" style="width:10px;height:10px;bottom:25%;left:22%;animation-delay:-3.8s"></div>
+  <div class="spark" style="width:7px;height:7px;bottom:9%;left:39%;animation-delay:-5.6s"></div>
+  <div class="spark" style="width:26px;height:26px;bottom:19%;right:13%;animation-delay:-3.1s"></div>
+  <div class="spark" style="width:12px;height:12px;top:14%;left:15%;animation-delay:-6.2s"></div>
+  <div class="spark" style="width:8px;height:8px;top:44%;right:8%;animation-delay:-2.1s"></div>
+  <div class="spark" style="width:9px;height:9px;bottom:44%;left:7%;animation-delay:-4.4s"></div>
+
+  <div class="mesh"></div><div class="grain"></div>
+</div>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginView">
+  <div class="loginCard">
+    <div id="loginLogo"></div>
+    <div class="hubLabel">Marketing Hub</div>
+    <p class="sub" id="brandTagline"></p>
+    <form id="loginForm" autocomplete="off">
+      <div class="field"><label>ชื่อผู้ใช้ · Username</label><input id="inUser" type="text" required autocomplete="username"></div>
+      <div class="field"><label>รหัสผ่าน · Password</label><input id="inPass" type="password" required autocomplete="current-password"></div>
+      <button class="btnGold" type="submit" id="loginBtn">เข้าสู่ระบบ</button>
+      <div class="loginErr" id="loginErr"></div>
+    </form>
+    <div class="loginFoot">ระบบภายในทีม Mersi Clinic · สงวนสิทธิ์เฉพาะผู้ได้รับอนุญาต</div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appView" class="hidden">
+  <div class="scrim" id="scrim" onclick="toggleSidebar(false)"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sbBrand"><div id="sbLogo"></div><div><div class="n" id="sbName"></div><div class="t" id="sbSub"></div></div></div>
+    <nav class="sbNav" id="sbNav"></nav>
+    <div class="sbUser">
+      <div class="avatar" id="uAvatar"></div>
+      <div><div class="un" id="uName"></div><div class="ur" id="uRole"></div></div>
+      <button class="logoutBtn" title="ออกจากระบบ" onclick="logout()">⎋</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="burger" onclick="toggleSidebar()">☰</button>
+      <div class="greet"><div class="g1" id="greetLine"></div><div class="g2" id="dateLine"></div></div>
+      <button class="searchBtn" onclick="openPal()"><span>⌕</span> ค้นหา dashboard… <span class="kbd">Ctrl K</span></button>
+      <button class="iconBtn" id="themeBtn" title="สลับโหมดสว่าง/มืด" onclick="toggleTheme()">☾</button>
+      <div class="clock"><div class="c1" id="clockTime">--:--</div><div class="c2">Bangkok · GMT+7</div></div>
+    </header>
+    <div class="content" id="homeView"></div>
+
+    <div id="viewer" class="hidden">
+      <div class="vBar">
+        <button class="vBtn" onclick="goHome()">← กลับ</button>
+        <div><div class="vTitle" id="vTitle"></div><div class="vMeta" id="vMeta"></div></div>
+        <div class="vActions">
+          <button class="vBtn" onclick="reloadFrame()">↻ Refresh</button>
+          <button class="vBtn" onclick="openNewTab()">↗ แท็บใหม่</button>
+          <button class="vBtn" onclick="goFullscreen()">⛶ เต็มจอ</button>
+        </div>
+      </div>
+      <div class="vFrameWrap" id="vWrap">
+        <iframe id="vFrame" allowfullscreen></iframe>
+        <div class="vLoad" id="vLoad"><div class="spinner"></div><div>กำลังโหลด DASHBOARD…</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= COMMAND PALETTE ================= -->
+<div id="palWrap" onclick="if(event.target===this)closePal()">
+  <div class="pal">
+    <input id="palInput" placeholder="พิมพ์ชื่อ dashboard, หมวด หรือแท็ก…" oninput="renderPal()">
+    <div id="palList"></div>
+    <div class="palFoot"><span>↑↓ เลือก</span><span>Enter เปิด</span><span>Esc ปิด</span></div>
+  </div>
+</div>
+
+<!-- ================= MODAL (ฟอร์มเพิ่ม/แก้ไข) ================= -->
+<div id="mdWrap" onclick="if(event.target===this)closeModal()">
+  <div class="md" role="dialog" aria-modal="true">
+    <div class="mdHead">
+      <div><div class="mdTitle" id="mdTitle"></div><div class="mdSub" id="mdSub"></div></div>
+      <button class="mdX" type="button" onclick="closeModal()" title="ปิด">✕</button>
+    </div>
+    <form id="mdForm" class="mdBody" autocomplete="off" onsubmit="event.preventDefault();mdSubmit()"></form>
+    <div class="mdFoot">
+      <div class="mdErr" id="mdErr"></div>
+      <button class="btnMini" type="button" onclick="closeModal()">ยกเลิก</button>
+      <button class="btnMini primary" type="button" id="mdSave" onclick="mdSubmit()">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="dashboards.config.js"></script>
+<script>
+/* ============================================================
+   MERSI MARKETING HUB v2 — Admin Panel + Google Sheet API + Dark
+   ============================================================ */
+const CFG = window.HUB_CONFIG || (function(){
+  console.warn("[HUB] ไม่พบ dashboards.config.js — ใช้ค่าเริ่มต้นในตัว (admin/1234)");
+  return {
+    brand:{ name:"Mersi", sub:"Marketing Hub", tagline:"ศูนย์รวม Dashboard ของทีมการตลาด", logo:"" },
+    api:{ url:"" },
+    categories:[{id:"sales",label:"ยอดขาย & รายได้",icon:"◇"},{id:"marketing",label:"การตลาด & แคมเปญ",icon:"✦"}],
+    dashboards:[{id:"demo",title:"ตัวอย่าง Dashboard",category:"sales",icon:"◇",desc:"วางไฟล์ dashboards.config.js ไว้โฟลเดอร์เดียวกับ index.html เพื่อใช้ข้อมูลจริง",tags:["demo"],roles:["marketing","area"],url:"about:blank"}],
+    users:[{username:"admin",displayName:"ผู้ดูแลระบบ",role:"admin",passwordHash:"03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"}]
+  };
+})();
+const SESSION_KEY = "mersi_hub_session";
+const SESSION_HOURS = 12;
+let session = null, currentDash = null;
+let palSel = 0;
+
+/* ============================================================
+   ROLES & PERMISSIONS (แก้ได้จากหน้าเว็บ — ไม่ต้องแตะโค้ด)
+   manage  = เข้าศูนย์ควบคุมระบบ / เพิ่ม-แก้ผู้ใช้ dashboard หมวดหมู่ ฯลฯ
+   allDash = เห็นทุก dashboard โดยไม่ต้องระบุสิทธิ์รายตัว
+   ============================================================ */
+const DEFAULT_ROLES = [
+  { id:"admin",     label:"ผู้ดูแลระบบ (Admin)",     manage:true,  allDash:true  },
+  { id:"it",        label:"ฝ่าย IT (IT Support)",     manage:true,  allDash:true  },
+  { id:"marketing", label:"ทีมการตลาด (Marketing)",  manage:false, allDash:false },
+  { id:"area",      label:"ผู้จัดการเขต (Area)",      manage:false, allDash:false },
+];
+/* localStorage override keys — โหมดในเครื่อง (ยังไม่เชื่อม Sheet) */
+const LS = {
+  users:"mersi_hub_localusers", dash:"mersi_hub_localdash",
+  cats:"mersi_hub_localcats",   roles:"mersi_hub_localroles",
+};
+function lsGet(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null } }
+function lsSet(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+
+function baseRoles(){
+  const cfg = Array.isArray(CFG.roles) && CFG.roles.length ? CFG.roles : DEFAULT_ROLES;
+  /* การันตีว่ามี admin/it เสมอ กันล็อกตัวเองออกจากระบบ */
+  const out = cfg.map(r=>({ id:r.id, label:r.label||r.id, manage:!!r.manage, allDash:!!r.allDash }));
+  DEFAULT_ROLES.slice(0,2).forEach(d=>{ if(!out.some(r=>r.id===d.id)) out.push({...d}); });
+  return out;
+}
+let RUNTIME = {
+  categories: lsGet(LS.cats) || CFG.categories || [],
+  dashboards: lsGet(LS.dash) || CFG.dashboards || [],
+  roles:      lsGet(LS.roles)|| baseRoles(),
+  announcement: null,
+};
+function roleDef(id){
+  return (RUNTIME.roles||[]).find(r=>r.id===id) || { id, label:id, manage:id==="admin", allDash:id==="admin" };
+}
+function roleLabel(id){ const r=roleDef(id); return r.label||id; }
+/* admin ได้สิทธิ์เต็มตลอด กัน config เพี้ยนแล้วเข้าระบบไม่ได้ */
+function canManage(){ return !!session && (session.role==="admin" || roleDef(session.role).manage===true); }
+function canSeeAll(){ return !!session && (session.role==="admin" || roleDef(session.role).allDash===true); }
+function viewRoles(){ return (RUNTIME.roles||[]).filter(r=>!r.allDash); }
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+async function sha256(str){
+  try{
+    if(crypto&&crypto.subtle){
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+    }
+  }catch(e){}
+  return sha256js(str); // fallback สำหรับ file:// หรือ non-HTTPS ที่ไม่มี crypto.subtle
+}
+/* pure-JS SHA-256 (ผลลัพธ์ hex ตรงกับ crypto.subtle) */
+function sha256js(ascii){
+  function rr(n,x){return (x>>>n)|(x<<(32-n));}
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  let h=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const bytes=[]; for(let i=0;i<ascii.length;i++){let c=ascii.charCodeAt(i);
+    if(c<128)bytes.push(c);else if(c<2048){bytes.push(192|(c>>6),128|(c&63));}
+    else if(c<55296||c>=57344){bytes.push(224|(c>>12),128|((c>>6)&63),128|(c&63));}
+    else{i++;c=0x10000+(((c&1023)<<10)|(ascii.charCodeAt(i)&1023));bytes.push(240|(c>>18),128|((c>>12)&63),128|((c>>6)&63),128|(c&63));}}
+  const l=bytes.length*8; bytes.push(0x80); while(bytes.length%64!==56)bytes.push(0);
+  for(let i=7;i>=0;i--)bytes.push((l/Math.pow(2,i*8))&0xff);
+  const w=new Int32Array(64);
+  for(let j=0;j<bytes.length;j+=64){
+    for(let i=0;i<16;i++)w[i]=(bytes[j+i*4]<<24)|(bytes[j+i*4+1]<<16)|(bytes[j+i*4+2]<<8)|bytes[j+i*4+3];
+    for(let i=16;i<64;i++){const s0=rr(7,w[i-15])^rr(18,w[i-15])^(w[i-15]>>>3),s1=rr(17,w[i-2])^rr(19,w[i-2])^(w[i-2]>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0;}
+    let[a,b,c,d,e,f,g,hh]=h;
+    for(let i=0;i<64;i++){const S1=rr(6,e)^rr(11,e)^rr(25,e),ch=(e&f)^(~e&g),t1=(hh+S1+ch+K[i]+w[i])|0,S0=rr(2,a)^rr(13,a)^rr(22,a),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0;hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}
+    h[0]=(h[0]+a)|0;h[1]=(h[1]+b)|0;h[2]=(h[2]+c)|0;h[3]=(h[3]+d)|0;h[4]=(h[4]+e)|0;h[5]=(h[5]+f)|0;h[6]=(h[6]+g)|0;h[7]=(h[7]+hh)|0;
+  }
+  return h.map(x=>(x>>>0).toString(16).padStart(8,"0")).join("");
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2800);
+}
+function esc(s){const d=document.createElement("div");d.textContent=s??"";
+  return d.innerHTML.replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function store(key, val){
+  const k = `mersi_hub_${key}_${session?.username||"x"}`;
+  if(val===undefined) return JSON.parse(localStorage.getItem(k)||"[]");
+  localStorage.setItem(k, JSON.stringify(val));
+}
+function logoHTML(size){
+  const px = size==="XL" ? 112 : 46;
+  if(CFG.brand.logo) return `<img class="logoImg" src="${esc(CFG.brand.logo)}" width="${px}" height="${px}" alt="logo">`;
+  return `<div class="logoCircle logo${size}"><span class="lm">Mersi</span><span class="lc">CLINIC</span></div>`;
+}
+
+/* ---------- theme ---------- */
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  localStorage.setItem("mersi_hub_theme", t);
+  const b=$("themeBtn"); if(b) b.textContent = t==="dark" ? "☀" : "☾";
+}
+function toggleTheme(){ applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"); }
+
+/* ---------- Google Sheet API ---------- */
+function apiUrl(){ return localStorage.getItem("mersi_hub_api") || (CFG.api && CFG.api.url) || ""; }
+async function api(action, data){
+  const url = apiUrl();
+  if(!url) return { ok:false, error:"NO_API" };
+  try{
+    const ctl = new AbortController();
+    const to = setTimeout(()=>ctl.abort(), 10000);
+    const r = await fetch(url, {
+      method:"POST", signal:ctl.signal,
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify({ action, token: session?.token, data: data||{} }),
+    });
+    clearTimeout(to);
+    const j = await r.json();
+    if(!j.ok && j.error==="TOKEN_EXPIRED"){ toast("เซสชันหมดอายุ — เข้าสู่ระบบใหม่"); setTimeout(logout, 1200); }
+    return j;
+  }catch(e){ return { ok:false, error:"NETWORK" }; }
+}
+
+/* ---------- auth / ผู้ใช้โหมดในเครื่อง ----------
+   overlay = รายการที่ IT แก้ในเครื่องนี้ (ทับค่าใน dashboards.config.js)
+   deleted:true = tombstone สำหรับผู้ใช้ที่มาจาก config แล้วถูกลบ            */
+function localUsers(){ return lsGet(LS.users) || []; }
+function saveLocalUsers(u){ lsSet(LS.users, u); }
+function allLocalUsers(){
+  const extra = localUsers();
+  const key = s => String(s||"").toLowerCase();
+  const merged = (CFG.users||[]).map(u=>{
+    const ov = extra.find(x=>key(x.username)===key(u.username));
+    return ov ? { ...u, ...ov } : u;
+  });
+  extra.forEach(x=>{ if(!merged.some(u=>key(u.username)===key(x.username))) merged.push(x); });
+  return merged.filter(u=>!u.deleted);
+}
+function upsertLocalUser(username, patch){
+  const key = s => String(s||"").toLowerCase();
+  const ex = localUsers();
+  const i = ex.findIndex(x=>key(x.username)===key(username));
+  if(i>=0){ ex[i] = { ...ex[i], ...patch }; }
+  else {
+    const base = (CFG.users||[]).find(u=>key(u.username)===key(username)) || { username };
+    ex.push({ ...base, ...patch });
+  }
+  saveLocalUsers(ex);
+}
+function loadSession(){
+  try{ const s = JSON.parse(localStorage.getItem(SESSION_KEY)); if(s && s.exp > Date.now()) return s; }catch(e){}
+  localStorage.removeItem(SESSION_KEY); return null;
+}
+$("loginForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const btn=$("loginBtn"); btn.textContent="กำลังตรวจสอบ…";
+  try{
+  const u=$("inUser").value.trim(), hash=await sha256($("inPass").value);
+  let done=false;
+  if(apiUrl()){
+    const r = await api("login", { username:u, hash });
+    if(r.ok){ startSession({ ...r.user, token:r.token, mode:"api" }); done=true; }
+    else if(r.error==="INVALID_LOGIN"){ $("loginErr").textContent="ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"; }
+    else { toast("เชื่อม Google Sheet ไม่ได้ — ใช้โหมดในเครื่องแทน"); }
+  }
+  if(!done && !$("loginErr").textContent){
+    const user = allLocalUsers().find(x=>x.username.toLowerCase()===u.toLowerCase() && x.passwordHash===hash && x.active!==false);
+    if(user) startSession({ username:user.username, displayName:user.displayName, role:user.role, mode:"local" });
+    else $("loginErr").textContent="ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+  }
+  }catch(err){ $("loginErr").textContent="เกิดข้อผิดพลาด: "+(err&&err.message||err); }
+  btn.textContent="เข้าสู่ระบบ";
+  $("inPass").value="";
+  setTimeout(()=>$("loginErr").textContent="",3000);
+});
+function startSession(s){
+  session = { ...s, exp: Date.now()+SESSION_HOURS*3600*1000 };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  enterApp();
+}
+function logout(){ localStorage.removeItem(SESSION_KEY); location.hash=""; location.reload(); }
+
+/* ---------- data ---------- */
+function visibleDashboards(){
+  return RUNTIME.dashboards.filter(d => d.active!==false && (canSeeAll() || (d.roles||[]).includes(session.role)));
+}
+function dashById(id){ return RUNTIME.dashboards.find(d=>d.id===id); }
+
+async function loadRemoteConfig(background){
+  if(session.mode!=="api") return;
+  const cached = localStorage.getItem("mersi_hub_cfgcache");
+  if(cached && !background){ try{ Object.assign(RUNTIME, JSON.parse(cached)); }catch(e){} }
+  const r = await api("getConfig");
+  if(r.ok){
+    RUNTIME.categories = r.categories?.length ? r.categories : CFG.categories;
+    RUNTIME.dashboards = r.dashboards?.length ? r.dashboards : CFG.dashboards;
+    RUNTIME.roles      = r.roles?.length      ? r.roles      : baseRoles();
+    RUNTIME.announcement = r.announcement;
+    localStorage.setItem("mersi_hub_cfgcache", JSON.stringify(RUNTIME));
+    renderSidebar();
+    if(!currentDash && !$("homeView").classList.contains("hidden") && !$("homeView")._adm) renderHome($("homeView")._filterCat);
+  }
+}
+
+/* ---------- boot ---------- */
+function enterApp(){
+  $("loginView").classList.add("hidden");
+  $("appView").classList.remove("hidden");
+  $("uAvatar").textContent = (session.displayName||session.username)[0].toUpperCase();
+  $("uName").textContent = session.displayName||session.username;
+  $("uRole").textContent = session.role + (session.mode==="api" ? " · sheet" : " · local");
+  $("uRole").title = roleLabel(session.role);
+  renderSidebar(); renderHome();
+  tickClock(); setInterval(tickClock, 1000);
+  loadRemoteConfig();
+  routeFromHash();
+}
+function initBrand(){
+  $("loginLogo").innerHTML = logoHTML("XL");
+  $("sbLogo").innerHTML = logoHTML("SM");
+  $("brandTagline").textContent = CFG.brand.tagline||"";
+  $("sbName").textContent = CFG.brand.name;
+  $("sbSub").textContent = CFG.brand.sub||"";
+  document.title = `${CFG.brand.name} Marketing Hub`;
+}
+function tickClock(){
+  const now = new Date();
+  $("clockTime").textContent = now.toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  const h = now.getHours();
+  const g = h<11?"สวัสดีตอนเช้า":h<16?"สวัสดีตอนบ่าย":h<19?"สวัสดีตอนเย็น":"สวัสดีตอนค่ำ";
+  $("greetLine").textContent = `${g}, คุณ${session.displayName||session.username}`;
+  $("dateLine").textContent = now.toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+
+/* ---------- sidebar ---------- */
+function renderSidebar(){
+  const dashes = visibleDashboards();
+  let html = `<div class="sbSection">เมนูหลัก</div>
+    <button class="navItem active" data-nav="home" onclick="goHome()"><span class="ic">⌂</span> หน้าแรก</button>
+    <button class="navItem" data-nav="fav" onclick="goHome('fav')"><span class="ic">★</span> รายการโปรด<span class="cnt">${store("fav").length||""}</span></button>
+    <div class="sbSection">หมวดหมู่</div>`;
+  RUNTIME.categories.forEach(c=>{
+    const n = dashes.filter(d=>d.category===c.id).length;
+    if(!n) return;
+    html += `<button class="navItem" data-nav="cat-${c.id}" onclick="goHome('${c.id}')"><span class="ic">${esc(c.icon||"◈")}</span> ${esc(c.label)}<span class="cnt">${n}</span></button>`;
+  });
+  if(canManage()){
+    html += `<div class="sbSection">ระบบ</div>
+      <button class="navItem" data-nav="admin" onclick="showAdmin()"><span class="ic">⚙</span> ศูนย์ควบคุมระบบ</button>`;
+  }
+  $("sbNav").innerHTML = html;
+}
+function setActiveNav(key){
+  document.querySelectorAll(".navItem").forEach(el=>el.classList.toggle("active", el.dataset.nav===key));
+}
+function toggleSidebar(force){
+  const sb=$("sidebar"), open = force!==undefined?force:!sb.classList.contains("open");
+  sb.classList.toggle("open",open); $("scrim").classList.toggle("show",open);
+}
+
+/* ---------- home ---------- */
+function isLive(d){ return (d.tags||[]).some(t=>/real.?time/i.test(t)); }
+function cardHTML(d, i){
+  const cat = RUNTIME.categories.find(c=>c.id===d.category);
+  const fav = store("fav").includes(d.id);
+  const hint = d.embed!==false ? "เปิดใน Hub →" : "เปิดแท็บใหม่ ↗";
+  const live = isLive(d) ? `<span class="dot" title="Real-time"></span>` : "";
+  return `<div class="card" style="--i:${i}" onclick="openDash('${d.id}')">
+    <button class="starBtn ${fav?"faved":""}" onclick="event.stopPropagation();toggleFav('${d.id}')">${fav?"★":"☆"}</button>
+    <div class="cardTop"><div class="medal">${esc(d.icon||"◈")}</div>
+      <div><div class="tt">${esc(d.title)}</div><div class="cat">${esc(cat?.label||d.category||"")} ${live}</div></div></div>
+    <div class="desc">${esc(d.desc||"")}</div>
+    <div class="cardFoot">${(d.tags||[]).slice(0,3).map(t=>`<span class="chip">${esc(t)}</span>`).join("")}<span class="openHint">${hint}</span></div>
+  </div>`;
+}
+function sectionHTML(title, cards){
+  if(!cards.length) return "";
+  return `<div class="sectionHead"><h3>${esc(title)}</h3><div class="rule"></div></div><div class="grid">${cards.join("")}</div>`;
+}
+function announceHTML(){
+  const a = RUNTIME.announcement || JSON.parse(localStorage.getItem("mersi_hub_announce")||"null");
+  if(!a || !a.text || sessionStorage.getItem("annHide")===a.text) return "";
+  return `<div class="announce ${a.level==="warn"?"warn":""}"><span>✦</span><span>${esc(a.text)}</span>
+    <button class="ax" onclick="sessionStorage.setItem('annHide',${JSON.stringify(a.text).replace(/"/g,"&quot;")});this.parentElement.remove()">✕</button></div>`;
+}
+function countUp(el, target){
+  let v=0; const step = Math.max(1, Math.ceil(target/28));
+  const tick=()=>{ v=Math.min(target, v+step); el.textContent=v; if(v<target) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+function renderHome(filterCat){
+  let i=0;
+  const dashes = visibleDashboards();
+  const favIds = store("fav"), recIds = store("recent");
+  const mode = session.mode==="api"
+    ? `<span class="dot"></span> เชื่อมต่อ Google Sheet`
+    : `<span class="dot off"></span> โหมดในเครื่อง (ยังไม่เชื่อม Sheet)`;
+  let html = announceHTML();
+  html += `<div class="hero">
+    <div class="micro">${new Date().toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"})}</div>
+    <h2>ทุก Dashboard ของ Mersi<br>อยู่ในที่<em>เดียว</em></h2>
+    <p>ข้อมูล Real-time จาก Google Sheets — กด Ctrl+K เพื่อค้นหาแบบเร็ว · สิทธิ์การมองเห็นตามบทบาท (${esc(roleLabel(session.role))})</p>
+    <div class="statRow">
+      <div class="statChip"><span class="v" data-count="${dashes.length}">0</span><span class="l">Dashboards</span></div>
+      <div class="statChip"><span class="v" data-count="${RUNTIME.categories.length}">0</span><span class="l">หมวดหมู่</span></div>
+      <div class="statChip"><span class="v" data-count="${favIds.length}">0</span><span class="l">รายการโปรด</span></div>
+      <div class="modeChip">${mode}</div>
+    </div></div>`;
+
+  if(filterCat==="fav"){
+    const favs = dashes.filter(d=>favIds.includes(d.id)).map(d=>cardHTML(d,i++));
+    html += favs.length ? sectionHTML("★ รายการโปรด",favs) : `<div class="emptyNote">ยังไม่มีรายการโปรด — กด ☆ บนการ์ดเพื่อบันทึก</div>`;
+    setActiveNav("fav");
+  } else if(filterCat){
+    const cat = RUNTIME.categories.find(c=>c.id===filterCat);
+    html += sectionHTML(cat?.label||filterCat, dashes.filter(d=>d.category===filterCat).map(d=>cardHTML(d,i++))) || `<div class="emptyNote">ไม่พบ dashboard ในหมวดนี้</div>`;
+    setActiveNav("cat-"+filterCat);
+  } else {
+    const favs = dashes.filter(d=>favIds.includes(d.id)).map(d=>cardHTML(d,i++));
+    html += sectionHTML("★ รายการโปรด",favs);
+    const recs = recIds.map(dashById).filter(d=>d && dashes.includes(d)).slice(0,4).map(d=>cardHTML(d,i++));
+    html += sectionHTML("เปิดล่าสุด",recs);
+    RUNTIME.categories.forEach(c=>{ html += sectionHTML(c.label, dashes.filter(d=>d.category===c.id).map(d=>cardHTML(d,i++))); });
+    setActiveNav("home");
+  }
+  $("homeView").innerHTML = html;
+  $("homeView")._filterCat = filterCat;
+  $("homeView")._adm = false;
+  $("homeView").querySelectorAll("[data-count]").forEach(el=>countUp(el, +el.dataset.count));
+}
+
+/* ---------- favorites / recents ---------- */
+function toggleFav(id){
+  let f = store("fav");
+  f = f.includes(id) ? f.filter(x=>x!==id) : [...f,id];
+  store("fav",f); renderSidebar(); renderHome($("homeView")._filterCat);
+  toast(f.includes(id)?"เพิ่มในรายการโปรดแล้ว ★":"นำออกจากรายการโปรดแล้ว");
+}
+function pushRecent(id){ store("recent",[id,...store("recent").filter(x=>x!==id)].slice(0,8)); }
+
+/* ---------- viewer ---------- */
+function openDash(id){
+  const d = dashById(id); if(!d) return;
+  if(!canSeeAll() && !(d.roles||[]).includes(session.role)){ toast("คุณไม่มีสิทธิ์เข้าถึง dashboard นี้"); return; }
+  pushRecent(id);
+  if(session.mode==="api") api("logOpen",{dash:id});
+  if(d.embed===false){ window.open(d.url,"_blank"); renderHome($("homeView")._filterCat); return; }
+  currentDash = d; location.hash = "d/"+id; showViewer(d);
+}
+function showViewer(d){
+  $("homeView").classList.add("hidden"); $("viewer").classList.remove("hidden");
+  $("vTitle").textContent = d.title;
+  const cat = RUNTIME.categories.find(c=>c.id===d.category);
+  $("vMeta").innerHTML = esc(cat?.label||"") + (isLive(d)?' <span class="dot"></span> LIVE':'');
+  const f = $("vFrame");
+  f.classList.remove("on");
+  $("vLoad").style.opacity=1; $("vLoad").style.pointerEvents="auto";
+  f.onload = ()=>{ $("vLoad").style.opacity=0; $("vLoad").style.pointerEvents="none"; f.classList.add("on"); };
+  f.src = d.url; toggleSidebar(false);
+}
+function goHome(cat){
+  currentDash=null; location.hash="";
+  $("vFrame").src="about:blank";
+  $("viewer").classList.add("hidden"); $("homeView").classList.remove("hidden");
+  renderHome(typeof cat==="string"?cat:undefined); toggleSidebar(false);
+}
+function reloadFrame(){ if(currentDash){ $("vFrame").classList.remove("on"); $("vLoad").style.opacity=1; $("vLoad").style.pointerEvents="auto"; $("vFrame").src=currentDash.url; } }
+function openNewTab(){ if(currentDash) window.open(currentDash.url,"_blank"); }
+function goFullscreen(){ document.fullscreenElement ? document.exitFullscreen() : $("vWrap").requestFullscreen?.(); }
+function routeFromHash(){ const m = location.hash.match(/^#d\/(.+)$/); if(m && dashById(m[1])) openDash(m[1]); }
+window.addEventListener("hashchange",()=>{ if(!session) return; if(!location.hash){ if(currentDash) goHome(); } else routeFromHash(); });
+
+/* ============================================================
+   MODAL — ฟอร์มกลางสำหรับ "เพิ่ม / แก้ไข" ทุกอย่าง
+   ============================================================ */
+let MD = null;
+function openModal(cfg){
+  MD = cfg;
+  $("mdTitle").textContent = cfg.title || "";
+  $("mdSub").textContent = cfg.subtitle || "";
+  $("mdErr").textContent = "";
+  $("mdSave").textContent = cfg.saveLabel || "บันทึก";
+  $("mdForm").innerHTML = (cfg.fields||[]).map(mdFieldHTML).join("");
+  $("mdWrap").classList.add("open");
+  setTimeout(()=>{ const el = $("mdForm").querySelector("input:not([disabled]),select,textarea"); if(el) el.focus(); }, 90);
+}
+function closeModal(){ $("mdWrap").classList.remove("open"); MD = null; }
+function mdFieldHTML(f){
+  const id = "mdf_" + f.key;
+  const hint = f.hint ? `<p class="fHint">${esc(f.hint)}</p>` : "";
+  const req  = f.required ? " *" : "";
+  if(f.type === "checkbox")
+    return `<label class="mdChk" style="margin-bottom:15px"><input type="checkbox" id="${id}" ${f.value?"checked":""}><span>${esc(f.label)}</span></label>${hint}`;
+  if(f.type === "checks")
+    return `<div class="field"><label>${esc(f.label)}${req}</label>
+      <div class="chkGrid" id="${id}">${(f.options||[]).map(o=>`<label class="mdChk"><input type="checkbox" value="${esc(o.value)}" ${(f.value||[]).includes(o.value)?"checked":""}><span>${esc(o.label)}</span></label>`).join("")}</div>${hint}</div>`;
+  if(f.type === "select")
+    return `<div class="field"><label>${esc(f.label)}${req}</label>
+      <select id="${id}">${(f.options||[]).map(o=>`<option value="${esc(o.value)}" ${String(f.value)===String(o.value)?"selected":""}>${esc(o.label)}</option>`).join("")}</select>${hint}</div>`;
+  if(f.type === "textarea")
+    return `<div class="field"><label>${esc(f.label)}${req}</label><textarea id="${id}" placeholder="${esc(f.placeholder||"")}">${esc(f.value||"")}</textarea>${hint}</div>`;
+  return `<div class="field"><label>${esc(f.label)}${req}</label>
+    <input id="${id}" type="${f.type||"text"}" value="${esc(f.value??"")}" placeholder="${esc(f.placeholder||"")}" ${f.disabled?"disabled":""}>${hint}</div>`;
+}
+function mdValues(){
+  const out = {};
+  (MD?.fields||[]).forEach(f=>{
+    const el = $("mdf_"+f.key); if(!el) return;
+    if(f.type === "checkbox") out[f.key] = el.checked;
+    else if(f.type === "checks") out[f.key] = [...el.querySelectorAll("input:checked")].map(x=>x.value);
+    else out[f.key] = String(el.value||"").trim();
+  });
+  return out;
+}
+async function mdSubmit(){
+  if(!MD) return;
+  const v = mdValues();
+  const miss = (MD.fields||[]).find(f=>f.required && (v[f.key]===""||v[f.key]===undefined||(Array.isArray(v[f.key])&&!v[f.key].length)));
+  if(miss){ $("mdErr").textContent = "กรอก “"+miss.label+"” ก่อนครับ"; return; }
+  const btn = $("mdSave"), old = btn.textContent;
+  btn.textContent = "กำลังบันทึก…"; btn.disabled = true; $("mdErr").textContent = "";
+  try{
+    const err = await MD.onSave(v);
+    if(err){ $("mdErr").textContent = err; }
+    else closeModal();
+  }catch(e){ $("mdErr").textContent = "ผิดพลาด: " + (e&&e.message||e); }
+  btn.textContent = old; btn.disabled = false;
+}
+
+/* ============================================================
+   IT / ADMIN CONSOLE — จัดการทุกอย่างจากหน้าเว็บ ไม่ต้องแก้โค้ด
+   ============================================================ */
+let admTab = "users";
+let ADM = { users:null, dash:null, cats:null, roles:null, view:[], err:"" };
+
+const ADM_TABS = [
+  ["users",    "ผู้ใช้งาน",         "👤"],
+  ["dash",     "Dashboard",         "▦"],
+  ["cats",     "หมวดหมู่",          "◈"],
+  ["roles",    "บทบาท & สิทธิ์",     "🔑"],
+  ["announce", "ประกาศ",            "📣"],
+  ["conn",     "เชื่อมต่อ & สำรองข้อมูล","⚡"],
+  ["stats",    "สถิติการใช้งาน",     "📊"],
+];
+
+function isApiMode(){ return session && session.mode === "api"; }
+function saveLocalDash(arr){ RUNTIME.dashboards = arr; lsSet(LS.dash, arr); }
+function saveLocalCats(arr){ RUNTIME.categories = arr; lsSet(LS.cats, arr); }
+function saveLocalRoles(arr){ RUNTIME.roles = arr; lsSet(LS.roles, arr); }
+
+async function admLoad(force){
+  if(isApiMode()){
+    if(ADM.dash && !force) return;
+    const r = await api("getAll");
+    if(r.ok){
+      ADM.users = r.users||[]; ADM.dash = r.dashboards||[]; ADM.cats = r.categories||[]; ADM.roles = r.roles||[]; ADM.err="";
+    }else{
+      ADM.users=[]; ADM.dash=[]; ADM.cats=[]; ADM.roles=[];
+      ADM.err = r.error==="UNKNOWN_ACTION"
+        ? "Apps Script ยังเป็นเวอร์ชันเก่า — อัปเดตไฟล์ apps-script/Code.gs แล้ว Deploy ใหม่"
+        : (r.error||"โหลดข้อมูลไม่สำเร็จ");
+    }
+  }else{
+    ADM.users = allLocalUsers().map(u=>({ username:u.username, displayName:u.displayName||u.username, role:u.role,
+      active:u.active!==false, note:u.note||"", lastLogin:"" }));
+    ADM.dash  = (RUNTIME.dashboards||[]).map(d=>({...d}));
+    ADM.cats  = (RUNTIME.categories||[]).map(c=>({...c}));
+    ADM.roles = (RUNTIME.roles||[]).map(r=>({...r}));
+    ADM.err   = "";
+  }
+}
+async function admRefresh(msg){
+  await admLoad(true);
+  if(isApiMode()) await loadRemoteConfig(true);
+  renderSidebar(); renderAdmBody();
+  if(msg) toast(msg);
+}
+
+function showAdmin(tab){
+  if(!canManage()){ toast("บัญชีนี้ไม่มีสิทธิ์เข้าศูนย์ควบคุมระบบ"); return; }
+  admTab = tab || admTab || "users";
+  currentDash = null; location.hash = "";
+  $("viewer").classList.add("hidden"); $("homeView").classList.remove("hidden");
+  setActiveNav("admin"); toggleSidebar(false);
+  $("homeView")._adm = true; $("homeView")._filterCat = undefined;
+  const roleTxt = roleLabel(session.role);
+  $("homeView").innerHTML = `
+  <div class="hero">
+    <div class="micro">${esc(roleTxt)} · Control Center</div>
+    <h2>ศูนย์ควบคุม<em>ระบบ</em></h2>
+    <p>เพิ่ม/แก้ไขผู้ใช้ · Dashboard · หมวดหมู่ · บทบาทและสิทธิ์ — ทำได้จากหน้านี้ทั้งหมด ไม่ต้องแก้ไฟล์โค้ดอีก</p>
+    <div class="statRow">
+      <div class="modeChip">${isApiMode()
+        ? `<span class="dot"></span> Google Sheet · บันทึกแล้วใช้ได้ทุกเครื่องทันที`
+        : `<span class="dot off"></span> โหมดในเครื่อง · บันทึกในเบราว์เซอร์นี้เท่านั้น`}</div>
+    </div>
+  </div>
+  <div class="tabBar">${ADM_TABS.map(t=>`<button class="tabBtn ${admTab===t[0]?"on":""}" onclick="showAdmin('${t[0]}')"><span>${t[2]}</span>${t[1]}</button>`).join("")}</div>
+  <div id="admBody"><div class="panel"><p class="ps" style="margin:0">กำลังโหลดข้อมูล…</p></div></div>`;
+  admLoad().then(renderAdmBody);
+}
+
+function renderAdmBody(){
+  const box = $("admBody"); if(!box) return;
+  if(ADM.err){
+    box.innerHTML = `<div class="panel"><h4>⚠ เชื่อมต่อฐานข้อมูลไม่สำเร็จ</h4>
+      <p class="ps">${esc(ADM.err)}</p>
+      <button class="btnMini" onclick="admRefresh('โหลดใหม่แล้ว')">↻ ลองอีกครั้ง</button>
+      <button class="btnMini" onclick="showAdmin('conn')">⚡ ไปหน้าเชื่อมต่อ</button></div>`;
+    return;
+  }
+  ({ users:admUsersTab, dash:admDashTab, cats:admCatsTab, roles:admRolesTab,
+     announce:admAnnounceTab, conn:admConnTab, stats:admStatsTab }[admTab] || admUsersTab)();
+}
+
+/* ---------------- TAB 1 · ผู้ใช้งาน ---------------- */
+function admUsersTab(){
+  $("admBody").innerHTML = `
+  <div class="panel">
+    <div class="pHead">
+      <div><h4>👤 ผู้ใช้งานทั้งหมด <span class="tagMini">${(ADM.users||[]).length} บัญชี</span></h4>
+        <p class="ps">${isApiMode()
+          ? "อ่าน/เขียนตรงกับชีต USERS — เพิ่มหรือแก้แล้วทุกเครื่องเห็นทันที"
+          : "โหมดในเครื่อง: บันทึกในเบราว์เซอร์นี้ — เชื่อม Google Sheet เพื่อใช้ร่วมทีม หรือดาวน์โหลด config ที่แท็บ “เชื่อมต่อ”"}</p></div>
+      <div class="pAct">
+        <input class="miniSearch" id="uSearch" placeholder="⌕ ค้นหาชื่อ / บทบาท" oninput="admRenderUsers()">
+        <button class="btnMini primary" onclick="userModal()">+ เพิ่มผู้ใช้</button>
+      </div>
+    </div>
+    <div id="admUsers" class="tblWrap"></div>
+  </div>`;
+  admRenderUsers();
+}
+function admRenderUsers(){
+  const box = $("admUsers"); if(!box) return;
+  const q = ($("uSearch")?.value||"").trim().toLowerCase();
+  let list = (ADM.users||[]).slice();
+  if(q) list = list.filter(u=>[u.username,u.displayName,u.role,roleLabel(u.role),u.note].join(" ").toLowerCase().includes(q));
+  ADM.view = list;
+  if(!list.length){ box.innerHTML = `<div class="emptyNote">ไม่พบผู้ใช้ที่ค้นหา</div>`; return; }
+  box.innerHTML = `<table class="tbl">
+    <tr><th>Username</th><th>ชื่อที่แสดง</th><th>บทบาท</th><th>สถานะ</th><th>เข้าล่าสุด</th><th style="text-align:right">จัดการ</th></tr>
+    ${list.map((u,i)=>{
+      const rd = roleDef(u.role), me = u.username===session.username;
+      return `<tr>
+      <td><b>${esc(u.username)}</b>${me?' <span class="tagMini">คุณ</span>':""}</td>
+      <td>${esc(u.displayName||"")}${u.note?`<div class="fHint">${esc(u.note)}</div>`:""}</td>
+      <td><span class="roleChip ${u.role==="admin"?"admin":(rd.manage?"it":"")}" title="${esc(roleLabel(u.role))}">${esc(u.role)}</span>
+        ${rd.manage?'<span class="tagMini">จัดการระบบ</span>':""}</td>
+      <td><span class="${u.active?"badgeOn":"badgeOff"}">${u.active?"ใช้งาน":"ปิด"}</span></td>
+      <td style="color:var(--ink-soft);font-size:13px">${esc(u.lastLogin||"—")}</td>
+      <td class="actCell">
+        <button class="btnMini" onclick="userModal(ADM.view[${i}])">✎ แก้ไข</button>
+        <button class="btnMini" title="ตั้งรหัสผ่านใหม่" onclick="pwModal(ADM.view[${i}])">⟳ รหัส</button>
+        <button class="btnMini" onclick="admToggle(ADM.view[${i}])">${u.active?"ปิดใช้":"เปิดใช้"}</button>
+        <button class="btnMini danger" onclick="admDelete(ADM.view[${i}])">ลบ</button>
+      </td></tr>`;
+    }).join("")}</table>`;
+}
+function roleOptions(){ return (RUNTIME.roles||[]).map(r=>({ value:r.id, label:`${r.id} — ${r.label}` })); }
+
+function userModal(u){
+  const edit = !!u;
+  openModal({
+    title: edit ? "แก้ไขผู้ใช้ · " + u.username : "เพิ่มผู้ใช้ใหม่",
+    subtitle: edit ? "เว้นช่องรหัสผ่านว่างไว้ = ไม่เปลี่ยนรหัสเดิม" : "ตั้งรหัสผ่านให้ผู้ใช้ แล้วแจ้งให้เปลี่ยนเมื่อเข้าใช้ครั้งแรก",
+    saveLabel: edit ? "บันทึกการแก้ไข" : "สร้างผู้ใช้",
+    fields: [
+      { key:"username", label:"Username (ใช้ล็อกอิน)", value:u?.username||"", required:!edit, disabled:edit,
+        hint: edit ? "แก้ username ไม่ได้ — ถ้าต้องเปลี่ยน ให้สร้างบัญชีใหม่แล้วลบบัญชีเดิม" : "ภาษาอังกฤษ/ตัวเลข ไม่มีเว้นวรรค" },
+      { key:"displayName", label:"ชื่อที่แสดง", value:u?.displayName||"", placeholder:"เช่น คุณเอ — ฝ่าย IT" },
+      { key:"role", label:"บทบาท (Role)", type:"select", options:roleOptions(), value:u?.role||"marketing",
+        hint:"เพิ่ม/แก้บทบาทได้ที่แท็บ “บทบาท & สิทธิ์”" },
+      { key:"pass", label: edit?"รหัสผ่านใหม่ (ถ้าต้องการเปลี่ยน)":"รหัสผ่าน", type:"text", value:"", required:!edit,
+        hint:"ระบบเก็บเป็น SHA-256 ไม่เก็บรหัสจริง" },
+      { key:"note", label:"หมายเหตุ (ไม่บังคับ)", value:u?.note||"", placeholder:"เช่น สาขาลาดพร้าว / เบอร์ติดต่อ" },
+      { key:"active", label:"เปิดใช้งานบัญชีนี้", type:"checkbox", value: edit ? !!u.active : true },
+    ],
+    onSave: async v=>{
+      const username = edit ? u.username : v.username.replace(/\s+/g,"");
+      if(!username) return "กรอก username ก่อนครับ";
+      if(!edit && (ADM.users||[]).some(x=>x.username.toLowerCase()===username.toLowerCase()))
+        return "มี username นี้อยู่แล้ว";
+      const hash = v.pass ? await sha256(v.pass) : "";
+      const payload = { username, displayName:v.displayName||username, role:v.role, note:v.note, active:!!v.active, hash };
+      if(isApiMode()){
+        const r = await api(edit ? "updateUser" : "addUser", payload);
+        if(!r.ok) return r.error==="USER_EXISTS" ? "มี username นี้อยู่แล้ว"
+          : r.error==="UNKNOWN_ACTION" ? "Apps Script เวอร์ชันเก่า — ต้อง Deploy Code.gs ใหม่" : "บันทึกไม่สำเร็จ ("+(r.error||"")+")";
+      }else{
+        const patch = { username, displayName:payload.displayName, role:v.role, note:v.note, active:!!v.active, deleted:false };
+        if(hash) patch.passwordHash = hash;
+        if(!edit && !hash) return "กรอกรหัสผ่านก่อนครับ";
+        upsertLocalUser(username, patch);
+      }
+      await admRefresh(edit ? "บันทึกการแก้ไขแล้ว ✓" : `สร้างผู้ใช้ ${username} สำเร็จ ✓`);
+    }
+  });
+}
+function pwModal(u){
+  openModal({
+    title:"ตั้งรหัสผ่านใหม่", subtitle:"บัญชี " + u.username, saveLabel:"เปลี่ยนรหัสผ่าน",
+    fields:[{ key:"pass", label:"รหัสผ่านใหม่", type:"text", required:true, hint:"แจ้งรหัสนี้ให้ผู้ใช้ แล้วให้เปลี่ยนภายหลัง" }],
+    onSave: async v=>{
+      const hash = await sha256(v.pass);
+      if(isApiMode()){ const r = await api("resetPassword",{ username:u.username, hash }); if(!r.ok) return "ไม่สำเร็จ ("+(r.error||"")+")"; }
+      else upsertLocalUser(u.username, { passwordHash:hash });
+      await admRefresh("เปลี่ยนรหัสผ่านของ "+u.username+" แล้ว ✓");
+    }
+  });
+}
+async function admToggle(u){
+  if(u.username===session.username && u.active){ toast("ปิดบัญชีตัวเองไม่ได้ครับ"); return; }
+  if(isApiMode()) await api("setActive",{ username:u.username, active:!u.active });
+  else upsertLocalUser(u.username, { active:!u.active });
+  await admRefresh(u.active ? "ปิดใช้งาน "+u.username : "เปิดใช้งาน "+u.username);
+}
+async function admDelete(u){
+  if(u.username===session.username){ toast("ลบบัญชีตัวเองไม่ได้ครับ"); return; }
+  const admins = (ADM.users||[]).filter(x=>roleDef(x.role).manage && x.active);
+  if(admins.length<=1 && roleDef(u.role).manage){ toast("ต้องเหลือบัญชีที่จัดการระบบได้อย่างน้อย 1 บัญชี"); return; }
+  if(!confirm(`ลบผู้ใช้ "${u.username}" ?\nการลบไม่สามารถย้อนกลับได้`)) return;
+  if(isApiMode()){ const r = await api("deleteUser",{ username:u.username }); if(!r.ok){ toast("ลบไม่สำเร็จ"); return; } }
+  else upsertLocalUser(u.username, { deleted:true, active:false });
+  await admRefresh("ลบผู้ใช้ "+u.username+" แล้ว");
+}
+
+/* ---------------- TAB 2 · Dashboard ---------------- */
+function admDashTab(){
+  const list = (ADM.dash||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  ADM.view = list;
+  $("admBody").innerHTML = `
+  <div class="panel">
+    <div class="pHead">
+      <div><h4>▦ Dashboard ในระบบ <span class="tagMini">${list.length} รายการ</span></h4>
+        <p class="ps">เพิ่มลิงก์ dashboard ใหม่ กำหนดหมวด สิทธิ์การมองเห็น และลำดับการแสดง — ไม่ต้องแก้ไฟล์ config</p></div>
+      <div class="pAct"><button class="btnMini primary" onclick="dashModal()">+ เพิ่ม Dashboard</button></div>
+    </div>
+    <div class="tblWrap">${list.length ? `<table class="tbl">
+      <tr><th style="width:52px">ลำดับ</th><th>ชื่อ · ลิงก์</th><th>หมวด</th><th>สิทธิ์เห็น</th><th>สถานะ</th><th style="text-align:right">จัดการ</th></tr>
+      ${list.map((d,i)=>{
+        const cat = (ADM.cats||[]).find(c=>c.id===d.category);
+        return `<tr>
+        <td style="white-space:nowrap"><button class="ordBtn" onclick="dashMove(${i},-1)" ${i===0?"disabled":""}>↑</button>
+          <button class="ordBtn" onclick="dashMove(${i},1)" ${i===list.length-1?"disabled":""}>↓</button></td>
+        <td><b>${esc(d.icon||"◈")} ${esc(d.title||d.id)}</b>
+          <span class="tagMini">${d.embed===false?"แท็บใหม่ ↗":"ใน Hub"}</span>
+          <div class="fHint">${esc(d.id)} · ${esc((d.url||"").replace(/^https?:\/\//,"").slice(0,46))}${(d.url||"").length>54?"…":""}</div></td>
+        <td style="font-size:14px">${esc(cat?.label||d.category||"—")}</td>
+        <td>${(d.roles||[]).length ? (d.roles||[]).map(r=>`<span class="tagMini">${esc(r)}</span>`).join("") : '<span class="fHint">เฉพาะผู้ดูแล/IT</span>'}</td>
+        <td><span class="${d.active===false?"badgeOff":"badgeOn"}">${d.active===false?"ซ่อน":"แสดง"}</span></td>
+        <td class="actCell">
+          <button class="btnMini" title="เปิดลิงก์ทดสอบในแท็บใหม่" onclick="window.open(ADM.view[${i}].url,'_blank')">↗</button>
+          <button class="btnMini" onclick="dashModal(ADM.view[${i}])">✎ แก้ไข</button>
+          <button class="btnMini danger" onclick="dashDelete(ADM.view[${i}])">ลบ</button>
+        </td></tr>`;
+      }).join("")}</table>` : `<div class="emptyNote">ยังไม่มี dashboard — กด “+ เพิ่ม Dashboard”</div>`}</div>
+    <div class="hintBox"><b>เคล็ดลับ:</b> ถ้าเว็บปลายทางฝังใน iframe ไม่ได้ (จอขาว) ให้ตั้ง “วิธีเปิด” เป็น <code>แท็บใหม่</code>
+      · Google Apps Script Web App ส่วนใหญ่ต้องเปิดแท็บใหม่</div>
+  </div>`;
+}
+function slugify(s){ return String(s||"").toLowerCase().trim().replace(/[^a-z0-9ก-๙]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40); }
+function dashModal(d){
+  const edit = !!d;
+  const cats = (ADM.cats||[]);
+  openModal({
+    title: edit ? "แก้ไข Dashboard" : "เพิ่ม Dashboard ใหม่",
+    subtitle: edit ? d.title : "วางลิงก์ dashboard แล้วกำหนดว่าใครเห็นได้",
+    saveLabel: edit ? "บันทึกการแก้ไข" : "เพิ่ม Dashboard",
+    fields: [
+      { key:"title", label:"ชื่อที่แสดงบนการ์ด", value:d?.title||"", required:true, placeholder:"เช่น Sales Dashboard — Group" },
+      { key:"id", label:"รหัส (ID) ใช้ในลิงก์", value:d?.id||"", disabled:edit, required:!edit,
+        hint: edit?"แก้ ID ไม่ได้":"เว้นว่างได้ ระบบจะสร้างจากชื่อให้อัตโนมัติ" },
+      { key:"url", label:"URL ของ dashboard", value:d?.url||"", required:true, placeholder:"https://…" },
+      { key:"desc", label:"คำอธิบาย", type:"textarea", value:d?.desc||"", placeholder:"อธิบายสั้นๆ ว่า dashboard นี้ดูอะไรได้" },
+      { key:"category", label:"หมวดหมู่", type:"select", value:d?.category||cats[0]?.id||"",
+        options: cats.map(c=>({ value:c.id, label:`${c.icon||"◈"} ${c.label}` })), hint:"เพิ่มหมวดใหม่ได้ที่แท็บ “หมวดหมู่”" },
+      { key:"icon", label:"ไอคอน (อักขระเดียว)", value:d?.icon||"◈", hint:"ใช้ได้ เช่น ◆ ◇ ◈ ❖ ✦ ▣ ▤ ▦ ◉ ♕" },
+      { key:"roles", label:"บทบาทที่มองเห็น", type:"checks", value:d?.roles||[],
+        options: viewRoles().map(r=>({ value:r.id, label:`${r.id} — ${r.label}` })),
+        hint:"ผู้ดูแลระบบและ IT เห็นทุก dashboard อยู่แล้ว ไม่ต้องติ๊ก" },
+      { key:"tags", label:"แท็ก (คั่นด้วยจุลภาค)", value:(d?.tags||[]).join(", "), placeholder:"real-time, 15 สาขา" },
+      { key:"embed", label:"วิธีเปิด", type:"select", value: d?.embed===false?"tab":"hub",
+        options:[{value:"hub",label:"เปิดใน Hub (iframe)"},{value:"tab",label:"เปิดแท็บใหม่"}] },
+      { key:"active", label:"แสดงบนหน้าแรก", type:"checkbox", value: d ? d.active!==false : true },
+    ],
+    onSave: async v=>{
+      const id = edit ? d.id : (slugify(v.id) || slugify(v.title));
+      if(!id) return "กรอกรหัส (ID) ก่อนครับ";
+      if(!edit && (ADM.dash||[]).some(x=>x.id===id)) return "มี ID นี้อยู่แล้ว — เปลี่ยนรหัสใหม่";
+      if(!/^https?:\/\//i.test(v.url)) return "URL ต้องเริ่มด้วย http:// หรือ https://";
+      const rec = {
+        id, title:v.title, desc:v.desc, category:v.category, icon:v.icon||"◈", url:v.url,
+        embed: v.embed!=="tab", roles:v.roles||[],
+        tags: v.tags ? v.tags.split(",").map(s=>s.trim()).filter(Boolean) : [],
+        order: d?.order || ((ADM.dash||[]).reduce((m,x)=>Math.max(m, +x.order||0), 0) + 1),
+        active: !!v.active,
+      };
+      if(isApiMode()){
+        const r = await api("saveDashboard", rec);
+        if(!r.ok) return r.error==="UNKNOWN_ACTION" ? "Apps Script เวอร์ชันเก่า — ต้อง Deploy Code.gs ใหม่" : "บันทึกไม่สำเร็จ ("+(r.error||"")+")";
+      }else{
+        const arr = (RUNTIME.dashboards||[]).slice();
+        const i = arr.findIndex(x=>x.id===id);
+        if(i>=0) arr[i] = { ...arr[i], ...rec }; else arr.push(rec);
+        saveLocalDash(arr);
+      }
+      await admRefresh(edit ? "บันทึก dashboard แล้ว ✓" : `เพิ่ม “${rec.title}” แล้ว ✓`);
+    }
+  });
+}
+async function dashDelete(d){
+  if(!confirm(`ลบ dashboard "${d.title||d.id}" ?`)) return;
+  if(isApiMode()){ const r = await api("deleteDashboard",{ id:d.id }); if(!r.ok){ toast("ลบไม่สำเร็จ"); return; } }
+  else saveLocalDash((RUNTIME.dashboards||[]).filter(x=>x.id!==d.id));
+  await admRefresh("ลบแล้ว");
+}
+async function dashMove(i, dir){
+  const list = ADM.view.slice(), j = i+dir;
+  if(j<0 || j>=list.length) return;
+  [list[i], list[j]] = [list[j], list[i]];
+  list.forEach((d,k)=>{ d.order = k+1; });
+  if(isApiMode()){ await api("reorderDashboards",{ ids:list.map(d=>d.id) }); }
+  else saveLocalDash(list.map(d=>({...d})));
+  await admRefresh();
+}
+
+/* ---------------- TAB 3 · หมวดหมู่ ---------------- */
+function admCatsTab(){
+  const list = (ADM.cats||[]).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  ADM.view = list;
+  $("admBody").innerHTML = `
+  <div class="panel">
+    <div class="pHead">
+      <div><h4>◈ หมวดหมู่ Dashboard <span class="tagMini">${list.length} หมวด</span></h4>
+        <p class="ps">หมวดหมู่ใช้จัดกลุ่มการ์ดบนหน้าแรกและเมนูซ้าย</p></div>
+      <div class="pAct"><button class="btnMini primary" onclick="catModal()">+ เพิ่มหมวดหมู่</button></div>
+    </div>
+    <div class="tblWrap">${list.length ? `<table class="tbl">
+      <tr><th style="width:52px">ลำดับ</th><th>ไอคอน</th><th>ชื่อหมวด</th><th>ID</th><th>Dashboard</th><th style="text-align:right">จัดการ</th></tr>
+      ${list.map((c,i)=>`<tr>
+        <td style="white-space:nowrap"><button class="ordBtn" onclick="catMove(${i},-1)" ${i===0?"disabled":""}>↑</button>
+          <button class="ordBtn" onclick="catMove(${i},1)" ${i===list.length-1?"disabled":""}>↓</button></td>
+        <td style="font-size:19px">${esc(c.icon||"◈")}</td>
+        <td><b>${esc(c.label)}</b></td>
+        <td class="fHint">${esc(c.id)}</td>
+        <td>${(ADM.dash||[]).filter(d=>d.category===c.id).length} รายการ</td>
+        <td class="actCell">
+          <button class="btnMini" onclick="catModal(ADM.view[${i}])">✎ แก้ไข</button>
+          <button class="btnMini danger" onclick="catDelete(ADM.view[${i}])">ลบ</button>
+        </td></tr>`).join("")}</table>` : `<div class="emptyNote">ยังไม่มีหมวดหมู่</div>`}</div>
+  </div>`;
+}
+function catModal(c){
+  const edit = !!c;
+  openModal({
+    title: edit?"แก้ไขหมวดหมู่":"เพิ่มหมวดหมู่ใหม่", subtitle: edit?c.label:"เช่น HR, Operation, Finance",
+    saveLabel: edit?"บันทึก":"เพิ่มหมวดหมู่",
+    fields:[
+      { key:"label", label:"ชื่อหมวด", value:c?.label||"", required:true, placeholder:"เช่น Finance & Cost" },
+      { key:"id", label:"รหัส (ID)", value:c?.id||"", disabled:edit, hint: edit?"แก้ ID ไม่ได้":"เว้นว่างได้ ระบบสร้างจากชื่อให้" },
+      { key:"icon", label:"ไอคอน", value:c?.icon||"◈" },
+    ],
+    onSave: async v=>{
+      const id = edit ? c.id : (slugify(v.id) || slugify(v.label));
+      if(!id) return "กรอกรหัส (ID) ก่อนครับ";
+      if(!edit && (ADM.cats||[]).some(x=>x.id===id)) return "มี ID นี้อยู่แล้ว";
+      const rec = { id, label:v.label, icon:v.icon||"◈",
+        order: c?.order || ((ADM.cats||[]).reduce((m,x)=>Math.max(m,+x.order||0),0)+1) };
+      if(isApiMode()){ const r = await api("saveCategory", rec); if(!r.ok) return "บันทึกไม่สำเร็จ ("+(r.error||"")+")"; }
+      else{
+        const arr = (RUNTIME.categories||[]).slice(); const i = arr.findIndex(x=>x.id===id);
+        if(i>=0) arr[i] = {...arr[i], ...rec}; else arr.push(rec);
+        saveLocalCats(arr);
+      }
+      await admRefresh(edit?"บันทึกหมวดหมู่แล้ว ✓":"เพิ่มหมวดหมู่แล้ว ✓");
+    }
+  });
+}
+async function catDelete(c){
+  const used = (ADM.dash||[]).filter(d=>d.category===c.id).length;
+  if(used){ toast(`ยังมี ${used} dashboard อยู่ในหมวดนี้ — ย้ายออกก่อนลบ`); return; }
+  if(!confirm(`ลบหมวดหมู่ "${c.label}" ?`)) return;
+  if(isApiMode()){ const r = await api("deleteCategory",{ id:c.id }); if(!r.ok){ toast("ลบไม่สำเร็จ"); return; } }
+  else saveLocalCats((RUNTIME.categories||[]).filter(x=>x.id!==c.id));
+  await admRefresh("ลบหมวดหมู่แล้ว");
+}
+async function catMove(i, dir){
+  const list = ADM.view.slice(), j = i+dir;
+  if(j<0||j>=list.length) return;
+  [list[i], list[j]] = [list[j], list[i]];
+  list.forEach((c,k)=>{ c.order = k+1; });
+  if(isApiMode()){ for(const c of list) await api("saveCategory", { id:c.id, label:c.label, icon:c.icon, order:c.order }); }
+  else saveLocalCats(list.map(c=>({...c})));
+  await admRefresh();
+}
+
+/* ---------------- TAB 4 · บทบาท & สิทธิ์ ---------------- */
+function admRolesTab(){
+  const list = (ADM.roles||[]);
+  ADM.view = list;
+  $("admBody").innerHTML = `
+  <div class="panel">
+    <div class="pHead">
+      <div><h4>🔑 บทบาท & สิทธิ์ <span class="tagMini">${list.length} บทบาท</span></h4>
+        <p class="ps">สร้างบทบาทใหม่ได้เอง เช่น <b>hr</b>, <b>finance</b>, <b>branch</b> แล้วนำไปผูกกับผู้ใช้และ dashboard ได้ทันที</p></div>
+      <div class="pAct"><button class="btnMini primary" onclick="roleModal()">+ เพิ่มบทบาท</button></div>
+    </div>
+    <div class="tblWrap"><table class="tbl">
+      <tr><th>Role ID</th><th>ชื่อเรียก</th><th>จัดการระบบ</th><th>เห็นทุก Dashboard</th><th>ผู้ใช้</th><th style="text-align:right">จัดการ</th></tr>
+      ${list.map((r,i)=>{
+        const cnt = (ADM.users||[]).filter(u=>u.role===r.id).length;
+        const lock = r.id==="admin";
+        return `<tr>
+        <td><b>${esc(r.id)}</b>${lock?' <span class="tagMini">ล็อก</span>':""}</td>
+        <td>${esc(r.label||"")}</td>
+        <td><span class="${r.manage?"badgeOn":"badgeOff"}">${r.manage?"ได้":"ไม่ได้"}</span></td>
+        <td><span class="${r.allDash?"badgeOn":"badgeOff"}">${r.allDash?"เห็นหมด":"ตามที่กำหนด"}</span></td>
+        <td>${cnt} คน</td>
+        <td class="actCell">
+          <button class="btnMini" onclick="roleModal(ADM.view[${i}])" ${lock?"disabled":""}>✎ แก้ไข</button>
+          <button class="btnMini danger" onclick="roleDelete(ADM.view[${i}])" ${lock?"disabled":""}>ลบ</button>
+        </td></tr>`;
+      }).join("")}</table></div>
+    <div class="hintBox">
+      <b>จัดการระบบ</b> = เข้าศูนย์ควบคุมนี้ได้ (เพิ่ม/แก้ผู้ใช้ dashboard หมวดหมู่) ·
+      <b>เห็นทุก Dashboard</b> = ไม่ต้องติ๊กสิทธิ์รายตัวใน dashboard<br>
+      บทบาท <code>admin</code> ถูกล็อกไว้เพื่อกันการตัดสิทธิ์ตัวเองจนเข้าระบบไม่ได้
+    </div>
+  </div>`;
+}
+function roleModal(r){
+  const edit = !!r;
+  openModal({
+    title: edit?"แก้ไขบทบาท · "+r.id:"เพิ่มบทบาทใหม่",
+    subtitle: edit?"":"เช่น hr / finance / branch-manager",
+    saveLabel: edit?"บันทึก":"เพิ่มบทบาท",
+    fields:[
+      { key:"id", label:"Role ID (อังกฤษ)", value:r?.id||"", disabled:edit, required:!edit, placeholder:"hr" },
+      { key:"label", label:"ชื่อเรียกที่แสดง", value:r?.label||"", required:true, placeholder:"ฝ่ายบุคคล (HR)" },
+      { key:"manage", label:"เข้าศูนย์ควบคุมระบบได้ (เพิ่ม/แก้ผู้ใช้ได้)", type:"checkbox", value:!!r?.manage },
+      { key:"allDash", label:"เห็นทุก dashboard โดยอัตโนมัติ", type:"checkbox", value:!!r?.allDash },
+    ],
+    onSave: async v=>{
+      const id = edit ? r.id : slugify(v.id).replace(/[^a-z0-9-]/g,"");
+      if(!id) return "กรอก Role ID เป็นภาษาอังกฤษ";
+      if(!edit && (ADM.roles||[]).some(x=>x.id===id)) return "มีบทบาทนี้อยู่แล้ว";
+      if(edit && id===session.role && !v.manage) return "ตัดสิทธิ์จัดการระบบของบทบาทตัวเองไม่ได้";
+      const rec = { id, label:v.label, manage:!!v.manage, allDash:!!v.allDash,
+        order:(ADM.roles||[]).length+1 };
+      if(isApiMode()){ const res = await api("saveRole", rec); if(!res.ok) return "บันทึกไม่สำเร็จ ("+(res.error||"")+")"; }
+      else{
+        const arr = (RUNTIME.roles||[]).slice(); const i = arr.findIndex(x=>x.id===id);
+        if(i>=0) arr[i]={...arr[i], ...rec}; else arr.push(rec);
+        saveLocalRoles(arr);
+      }
+      await admRefresh(edit?"บันทึกบทบาทแล้ว ✓":"เพิ่มบทบาทแล้ว ✓");
+    }
+  });
+}
+async function roleDelete(r){
+  if(r.id==="admin"||r.id===session.role){ toast("ลบบทบาทนี้ไม่ได้"); return; }
+  const cnt = (ADM.users||[]).filter(u=>u.role===r.id).length;
+  if(cnt){ toast(`ยังมีผู้ใช้ ${cnt} คนใช้บทบาทนี้ — เปลี่ยนบทบาทให้เขาก่อน`); return; }
+  if(!confirm(`ลบบทบาท "${r.id}" ?`)) return;
+  if(isApiMode()){ const res = await api("deleteRole",{ id:r.id }); if(!res.ok){ toast("ลบไม่สำเร็จ"); return; } }
+  else saveLocalRoles((RUNTIME.roles||[]).filter(x=>x.id!==r.id));
+  await admRefresh("ลบบทบาทแล้ว");
+}
+
+/* ---------------- TAB 5 · ประกาศ ---------------- */
+function admAnnounceTab(){
+  const a = RUNTIME.announcement || lsGet("mersi_hub_announce") || {};
+  $("admBody").innerHTML = `
+  <div class="panel"><h4>📣 ประกาศบนหน้าแรก</h4>
+    <p class="ps">ข้อความจะขึ้นแถบบนสุดของหน้าแรกให้ทุกคนเห็น — เว้นว่างแล้วบันทึก = ลบประกาศ</p>
+    <div class="formRow">
+      <div class="field" style="flex:3"><label>ข้อความประกาศ</label><input id="annText" type="text" value="${esc(a.text||"")}" placeholder="เช่น ระบบจะปิดปรับปรุงวันเสาร์ 20:00–22:00"></div>
+      <div class="field" style="max-width:150px"><label>ระดับ</label><select id="annLevel">
+        <option value="info" ${a.level!=="warn"?"selected":""}>ทั่วไป</option>
+        <option value="warn" ${a.level==="warn"?"selected":""}>สำคัญ</option></select></div>
+      <button class="btnMini primary" onclick="admAnnounce()">บันทึกประกาศ</button>
+    </div>
+  </div>`;
+}
+async function admAnnounce(){
+  const text = $("annText").value.trim(), level = $("annLevel").value;
+  if(isApiMode()){
+    const r = await api("setAnnouncement",{ text, level });
+    if(r.ok){ RUNTIME.announcement = text?{text,level}:null; toast("บันทึกประกาศแล้ว ✓"); }
+    else toast("บันทึกไม่สำเร็จ");
+  }else{
+    if(text) lsSet("mersi_hub_announce",{text,level}); else localStorage.removeItem("mersi_hub_announce");
+    RUNTIME.announcement = text?{text,level}:null;
+    toast("บันทึกประกาศแล้ว (เครื่องนี้) ✓");
+  }
+  sessionStorage.removeItem("annHide");
+}
+
+/* ---------------- TAB 6 · เชื่อมต่อ & สำรองข้อมูล ---------------- */
+function admConnTab(){
+  $("admBody").innerHTML = `
+  <div class="panel"><h4>⚡ การเชื่อมต่อ Google Sheet</h4>
+    <p class="ps">วาง URL ของ Apps Script Web App (ลงท้าย <code>/exec</code>) — เมื่อเชื่อมแล้วผู้ใช้และ dashboard จะใช้ร่วมกันทุกเครื่อง ·
+      สถานะ: <b>${isApiMode()?"● เชื่อมต่อแล้ว":"○ โหมดในเครื่อง"}</b></p>
+    <div class="formRow">
+      <div class="field" style="flex:3"><label>Web App URL</label><input id="admApi" type="text" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(apiUrl())}"></div>
+      <button class="btnMini" onclick="admTest()">ทดสอบ</button>
+      <button class="btnMini primary" onclick="admSaveApi()">บันทึก</button>
+    </div>
+    <p class="ps" id="admApiMsg" style="margin:10px 0 0"></p>
+  </div>
+
+  <div class="panel"><h4>💾 สำรอง / กู้คืนข้อมูลตั้งค่า</h4>
+    <p class="ps">ไฟล์สำรองครอบคลุม บทบาท · หมวดหมู่ · dashboard (ไม่รวมรหัสผ่านผู้ใช้)</p>
+    <div class="formRow">
+      <button class="btnMini" onclick="admBackup()">⤓ ดาวน์โหลดไฟล์สำรอง (.json)</button>
+      <button class="btnMini" onclick="$('impFile').click()">⤒ กู้คืนจากไฟล์</button>
+      <input type="file" id="impFile" accept=".json" class="hidden" onchange="admRestore(this)">
+    </div>
+    <div class="hintBox">โหมดในเครื่อง: กด <b>“คัดลอกไฟล์ config”</b> ด้านล่างแล้ววางทับไฟล์ <code>dashboards.config.js</code>
+      เพื่อให้ค่าที่ตั้งไว้กลายเป็นค่าเริ่มต้นของทุกเครื่อง</div>
+    <div class="formRow" style="margin-top:12px">
+      <button class="btnMini" onclick="admCopyConfig()">⎘ คัดลอกไฟล์ config ทั้งไฟล์</button>
+      <button class="btnMini" onclick="admDownloadConfig()">⤓ ดาวน์โหลด dashboards.config.js</button>
+    </div>
+  </div>
+
+  <div class="panel"><h4>🧹 ล้างค่าที่บันทึกในเครื่องนี้</h4>
+    <p class="ps">ใช้เมื่อทดลองแก้ในเครื่องแล้วอยากกลับไปใช้ค่าจากไฟล์ config / Google Sheet</p>
+    <button class="btnMini danger" onclick="admClearLocal()">ล้างข้อมูลในเครื่อง (localStorage)</button>
+  </div>`;
+}
+async function admTest(){
+  const url = $("admApi").value.trim();
+  $("admApiMsg").textContent = "กำลังทดสอบ…";
+  try{
+    const r = await fetch(url,{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({action:"ping"}) });
+    const j = await r.json();
+    $("admApiMsg").textContent = j.ok ? "✓ เชื่อมต่อสำเร็จ — "+j.name+(j.version?" ("+j.version+")":"") : "✕ ตอบกลับไม่ถูกต้อง";
+  }catch(e){ $("admApiMsg").textContent = "✕ เชื่อมต่อไม่ได้ — ตรวจ URL และการ Deploy (Who has access: Anyone)"; }
+}
+function admSaveApi(){
+  const url = $("admApi").value.trim();
+  if(url) localStorage.setItem("mersi_hub_api", url); else localStorage.removeItem("mersi_hub_api");
+  toast("บันทึกแล้ว — กำลังเข้าสู่ระบบใหม่เพื่อใช้การเชื่อมต่อ");
+  setTimeout(logout, 1300);
+}
+function dl(name, text, type){
+  const b = new Blob([text], { type: type||"application/json;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(b); a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+function admBackup(){
+  const data = { _type:"mersi-hub-backup", savedAt:new Date().toISOString(),
+    roles:ADM.roles||[], categories:ADM.cats||[], dashboards:ADM.dash||[] };
+  dl(`mersi-hub-backup-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(data,null,2));
+  toast("ดาวน์โหลดไฟล์สำรองแล้ว ✓");
+}
+async function admRestore(input){
+  const file = input.files?.[0]; if(!file) return;
+  input.value = "";
+  try{
+    const data = JSON.parse(await file.text());
+    if(!data || (!data.dashboards && !data.categories && !data.roles)) { toast("ไฟล์ไม่ถูกต้อง"); return; }
+    if(!confirm("กู้คืนข้อมูลจากไฟล์นี้? ค่าที่มีอยู่ที่ ID ตรงกันจะถูกเขียนทับ")) return;
+    if(isApiMode()){
+      for(const r of (data.roles||[])) await api("saveRole", r);
+      for(const c of (data.categories||[])) await api("saveCategory", c);
+      for(const d of (data.dashboards||[])) await api("saveDashboard", d);
+    }else{
+      if(data.roles?.length) saveLocalRoles(data.roles);
+      if(data.categories?.length) saveLocalCats(data.categories);
+      if(data.dashboards?.length) saveLocalDash(data.dashboards);
+    }
+    await admRefresh("กู้คืนข้อมูลแล้ว ✓");
+  }catch(e){ toast("อ่านไฟล์ไม่สำเร็จ: "+(e.message||e)); }
+}
+function buildConfigFile(){
+  const J = v => JSON.stringify(v);
+  const users = allLocalUsers().filter(u=>u.passwordHash && u.passwordHash!=="-");
+  return `/* ============================================================
+   MERSI MARKETING HUB — CONFIG
+   สร้างอัตโนมัติจากศูนย์ควบคุมระบบ · ${new Date().toLocaleString("th-TH")}
+   ============================================================ */
+
+window.HUB_CONFIG = {
+
+  brand: ${JSON.stringify(CFG.brand, null, 4).replace(/\n/g,"\n  ")},
+
+  api: { url: ${J(apiUrl())} },
+
+  /* ---------- บทบาท & สิทธิ์ ---------- */
+  roles: [
+${(ADM.roles||[]).map(r=>`    { id:${J(r.id)}, label:${J(r.label)}, manage:${!!r.manage}, allDash:${!!r.allDash} },`).join("\n")}
+  ],
+
+  /* ---------- ผู้ใช้ (passwordHash = SHA-256) ---------- */
+  users: [
+${users.map(u=>`    { username:${J(u.username)}, displayName:${J(u.displayName||u.username)}, role:${J(u.role)},\n      passwordHash:${J(u.passwordHash)}${u.active===false?", active:false":""} },`).join("\n")}
+  ],
+
+  /* ---------- หมวดหมู่ ---------- */
+  categories: [
+${(ADM.cats||[]).map(c=>`    { id:${J(c.id)}, label:${J(c.label)}, icon:${J(c.icon||"◈")} },`).join("\n")}
+  ],
+
+  /* ---------- DASHBOARDS ---------- */
+  dashboards: [
+${(ADM.dash||[]).map(d=>`    {
+      id:${J(d.id)}, title:${J(d.title)},
+      desc:${J(d.desc||"")},
+      category:${J(d.category)}, icon:${J(d.icon||"◈")},
+      url:${J(d.url)},
+      embed:${d.embed!==false}, roles:${J(d.roles||[])},
+      tags:${J(d.tags||[])}${d.active===false?", active:false":""},
+    },`).join("\n")}
+  ],
+};
+`;
+}
+function admCopyConfig(){
+  const txt = buildConfigFile();
+  navigator.clipboard.writeText(txt)
+    .then(()=>toast("คัดลอกแล้ว — วางทับไฟล์ dashboards.config.js"))
+    .catch(()=>{ dl("dashboards.config.js", txt, "text/javascript;charset=utf-8"); toast("คัดลอกไม่ได้ — ดาวน์โหลดไฟล์ให้แล้ว"); });
+}
+function admDownloadConfig(){ dl("dashboards.config.js", buildConfigFile(), "text/javascript;charset=utf-8"); toast("ดาวน์โหลดแล้ว ✓"); }
+function admClearLocal(){
+  if(!confirm("ล้างผู้ใช้/dashboard/หมวดหมู่/บทบาท ที่บันทึกในเครื่องนี้?")) return;
+  [LS.users, LS.dash, LS.cats, LS.roles, "mersi_hub_cfgcache", "mersi_hub_announce"].forEach(k=>localStorage.removeItem(k));
+  toast("ล้างแล้ว — กำลังโหลดหน้าใหม่"); setTimeout(()=>location.reload(), 1000);
+}
+
+/* ---------------- TAB 7 · สถิติ ---------------- */
+async function admStatsTab(){
+  if(!isApiMode()){
+    $("admBody").innerHTML = `<div class="panel"><h4>📊 สถิติการใช้งาน</h4>
+      <p class="ps">ต้องเชื่อม Google Sheet ก่อนจึงจะเก็บสถิติการเปิดใช้ได้</p>
+      <button class="btnMini" onclick="showAdmin('conn')">⚡ ไปตั้งค่าการเชื่อมต่อ</button></div>`;
+    return;
+  }
+  $("admBody").innerHTML = `<div class="panel"><h4>📊 สถิติการใช้งาน</h4><div id="admStats"><p class="ps">กำลังโหลด…</p></div></div>`;
+  const r = await api("stats"); const box = $("admStats"); if(!box) return;
+  if(!r.ok){ box.innerHTML = `<p class="ps">โหลดสถิติไม่สำเร็จ (${esc(r.error||"")})</p>`; return; }
+  const max = Math.max(1, ...((r.topDashboards||[]).map(t=>t.count)));
+  box.innerHTML = `
+    <div class="statRow" style="margin:0 0 18px">
+      <div class="statChip"><span class="v">${r.openCount}</span><span class="l">ครั้งที่เปิดใช้</span></div>
+      <div class="statChip"><span class="v">${r.userCount}</span><span class="l">ผู้ใช้ทั้งหมด</span></div>
+    </div>
+    <p class="ps" style="margin-bottom:8px">Dashboard ยอดนิยม</p>
+    ${(r.topDashboards||[]).map(t=>{ const d=dashById(t.id);
+      return `<div class="barRow"><span class="n">${esc(d?.title||t.id)}</span><div class="barTrack"><div class="barFill" style="width:${Math.round(t.count/max*100)}%"></div></div><span>${t.count}</span></div>`;
+    }).join("") || '<p class="ps">ยังไม่มีข้อมูล</p>'}
+    <p class="ps" style="margin:16px 0 6px">กิจกรรมล่าสุด</p>
+    <div class="tblWrap"><table class="tbl">${(r.recent||[]).slice(0,15).map(a=>`<tr>
+      <td style="color:var(--ink-soft);font-size:13px;white-space:nowrap">${esc(a.time)}</td>
+      <td><b>${esc(a.user)}</b></td><td>${esc(a.action)}</td>
+      <td style="color:var(--ink-soft)">${esc(a.detail)}</td></tr>`).join("")}</table></div>`;
+}
+
+/* ============================================================
+   COMMAND PALETTE
+   ============================================================ */
+function palItems(){
+  const q = $("palInput").value.trim().toLowerCase();
+  let list = visibleDashboards();
+  if(q) list = list.filter(d=>[d.title,d.desc,d.category,(d.tags||[]).join(" ")].join(" ").toLowerCase().includes(q));
+  else { const rec = store("recent").map(dashById).filter(Boolean); list = [...rec, ...list.filter(d=>!rec.includes(d))]; }
+  return list.slice(0,12);
+}
+function openPal(){ $("palWrap").classList.add("open"); $("palInput").value=""; palSel=0; renderPal(); setTimeout(()=>$("palInput").focus(),60); }
+function closePal(){ $("palWrap").classList.remove("open"); }
+function renderPal(){
+  const items = palItems(); palSel = Math.min(palSel, Math.max(0,items.length-1));
+  $("palList").innerHTML = items.map((d,i)=>{
+    const cat = RUNTIME.categories.find(c=>c.id===d.category);
+    return `<button class="palItem ${i===palSel?"sel":""}" onclick="closePal();openDash('${d.id}')">
+      <div class="medal">${esc(d.icon||"◈")}</div>
+      <div><div class="t">${esc(d.title)}</div><div class="c">${esc(cat?.label||"")}</div></div>
+      <span class="go">${d.embed!==false?"เปิด →":"แท็บใหม่ ↗"}</span></button>`;
+  }).join("") || `<div class="emptyNote" style="margin:10px">ไม่พบผลลัพธ์</div>`;
+}
+document.addEventListener("keydown",e=>{
+  if($("mdWrap").classList.contains("open")){
+    if(e.key==="Escape"){ e.preventDefault(); closeModal(); }
+    if(e.key==="Enter" && e.target.tagName!=="TEXTAREA" && e.target.id!=="mdSave"){ e.preventDefault(); mdSubmit(); }
+    return;
+  }
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="k"){ e.preventDefault(); $("palWrap").classList.contains("open")?closePal():openPal(); return; }
+  if($("palWrap").classList.contains("open")){
+    const items = palItems();
+    if(e.key==="ArrowDown"){ e.preventDefault(); palSel=Math.min(palSel+1,items.length-1); renderPal(); }
+    if(e.key==="ArrowUp"){ e.preventDefault(); palSel=Math.max(palSel-1,0); renderPal(); }
+    if(e.key==="Enter"){ e.preventDefault(); const d=items[palSel]; if(d){ closePal(); openDash(d.id); } }
+    if(e.key==="Escape") closePal();
+    return;
+  }
+  if(e.key==="Escape" && currentDash) goHome();
+});
+
+/* ---------- init ---------- */
+applyTheme(localStorage.getItem("mersi_hub_theme")||"light");
+initBrand();
+session = loadSession();
+if(session) enterApp();
+</script>
+</body>
+</html>
